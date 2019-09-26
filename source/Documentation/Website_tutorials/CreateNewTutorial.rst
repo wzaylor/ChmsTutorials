@@ -34,14 +34,15 @@ You will clone the repository to your local computer once. This is different fro
         sudo apt install git
 
 #) Open a terminal (or a command window in Windows) and navigate to a directory where you plan on keeping the repository. For example, ``/home/user-name/Projects`` or ``C:\Projects``
-#) Go the the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_) and copy the clone link.
+#) Go the the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_) and click the fork link.
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubClone1.png
-        :width: 500px
+        :width: 300px
         :align: center
         :alt: alternate text
         :figclass: align-center
 
+#) Enter your username and password. After the screen stops loading, you will see the web address is something like ``https://github.com/username/ChmsTutorials`` (where your username is in place of *username*). Copy this address.
 #) In the terminal, enter this command (*paste the clone link*) ``git clone **clone-link**``
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubClone2.png
