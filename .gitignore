@@ -1,0 +1,13 @@
+# Ignore the build files in ChmsTutorials/chms
+chms/Documentation
+chms/genindex
+chms/_images
+chms/Python
+chms/search
+chms/_sources
+chms/_static
+chms/.doctrees
+chms/index.html
+chms/objects.inv
+chms/searchindex.js
+chms/.buildinfo

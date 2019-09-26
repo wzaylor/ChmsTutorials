@@ -1,0 +1,49 @@
+{# Import the theme's layout. #}
+{% extends "!layout.html" %}
+
+{% block extrahead %}
+<link href="/images/siteimages/favicon.ico" rel="shortcut icon">
+    <title>Center for Human-Machine Systems</title>
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+    </script>
+    <!-- Include all compiled plugins (below), or include individual files as needed --> 
+    <script src="/js/bootstrap.js"></script>
+    <script> 
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous">
+  </script>
+  <!-- Include all compiled plugins (below), or include individual files as needed --> 
+  <script> 
+  $(function(){
+      $("#header").load("/header.html"); 
+      $("#footer").load("/footer.html"); 
+  });
+  </script> 
+  {{ super() }}
+{% endblock %}
+
+{# Add some extra stuff before and use existing with 'super()' call. #}
+{% block header %}
+<!-- Put the header here! -->
+    <!-- ********************************************** -->
+    <div id="header"></div>
+    <!-- ********************************************** -->
+{% endblock %}
+
+{% block footer %}
+<!-- Put the footer here! -->
+{{ super() }}
+
+    <!-- ********************************************** -->
+    <div id="footer"></div>
+    <!-- ********************************************** -->
+{% endblock %}
