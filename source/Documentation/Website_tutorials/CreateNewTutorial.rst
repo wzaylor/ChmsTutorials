@@ -8,33 +8,34 @@ The purpose of this tutorial is to describe how to use Sphinx to create/build a 
 
 These tutorials are written in reStructredText, and a program called Sphinx is used to convert reStructuredText files into .html format. The html files can be directly loaded onto the lab website. This allows for a wiki-style documentation.
 
-This tutorial will describe how to generate tutorials, such as this one, while also demonstrating features that you may want to include in your own tutorials.
+This tutorial first describes what :ref:`software<DocumentationWebsiteCreateNewTutorialSoftware>` is needed, then how to :ref:`fork<DocumentationWebsiteCreateNewTutorialGithub>` the ChmsTurorials repository. There is a section that describes how to :ref:`create<DocumentationWebsiteCreateNewTutorialCreateDocument>` a page on the website, and there is a hello_world :ref:`example<DocumentationWebsiteCreateNewTutorialExample>`.
+
+.. _DocumentationWebsiteCreateNewTutorialSoftware:
 
 Software
 ''''''''
-Placeholder
+placeholder
 
 .. _DocumentationWebsiteCreateNewTutorialGithub:
 
 Clone Github tutorials repository
 '''''''''''''''''''''''''''''''''
-These tutorials are stored on a public repository located here: `<https://github.com/CSU-CHMS/ChmsTutorials>`_. For users who are unfamiliar with using a git repository, please follow the instructions below to *clone* the repository then see the :ref:`DocumentationWebsiteCreateNewTutorialGithubWorkflow` section for a description of the general workflow you will use to add and update files in the repository.
+You will clone the repository to your local computer once. This is different from simply downloading the repository because *forking/cloning* allows you to push your changes back into the public repository. Follow these steps to *fork* and *clone* the repository.
 
-You will clone the repository to your local computer once. This is different from simply downloading the repository because *cloning* allows you to push your changes back into the public repository. Follow these steps to clone the repository:
+These tutorials are stored on a public repository located here: `<https://github.com/CSU-CHMS/ChmsTutorials>`_. For users who are unfamiliar with using a git repository, please follow the instructions below to *fork* then *clone* the repository. After you have *forked* and *cloned* the repository, see the :ref:`DocumentationWebsiteCreateNewTutorialGithubWorkflow` section for a description of the general workflow you will use to add and update files in the repository.
 
 #) Create an account on github (`<https://github.com/join>`_)
 #) Download and install *git*
     
     For Windows users, download from here, `<https://git-scm.com/>`_, and install the file.
 
-    For linux/ubuntu users, open a terminal and enter these commands to install git using ``apt-get``
+    For linux/ubuntu users, open a terminal and enter these commands to install git using ``apt``
     
     .. code-block:: none
 
         sudo apt install git
 
-#) Open a terminal (or a command window in Windows) and navigate to a directory where you plan on keeping the repository. For example, ``/home/user-name/Projects`` or ``C:\Projects``
-#) Go the the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_) and click the fork link.
+#) Go the the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_) and click the fork link. *Forking* the repository allows you to clone the repository, then after you make changes locally, you can submit a *pull request*, which is described :ref:`here<DocumentationWebsiteCreateNewTutorialGithubWorkflow>`.
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubClone1.png
         :width: 300px
@@ -42,40 +43,114 @@ You will clone the repository to your local computer once. This is different fro
         :alt: alternate text
         :figclass: align-center
 
-#) Enter your username and password. After the screen stops loading, you will see the web address is something like ``https://github.com/username/ChmsTutorials`` (where your username is in place of *username*). Copy this address.
+        Click the ``fork`` button.
+
+#) Enter your username and password if prompted. After the screen stops loading, you will see the web address is something like ``https://github.com/username/ChmsTutorials`` (where your username is in place of *username*). Copy this address.
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubClone1b.png
+        :width: 500px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        Copy the web address after clicking the ``fork`` button.
+
+#) Open a terminal (or a command window in Windows) and navigate to a directory where you plan on keeping the repository. For example, ``/home/user-name/Projects`` or ``C:\Projects``
 #) In the terminal, enter this command (*paste the clone link*) ``git clone **clone-link**``
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubClone2.png
-            :width: 400px
-            :align: center
-            :alt: alternate text
-            :figclass: align-center
+        :width: 400px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
 
 Now you have successfully clone the *ChmsTutorials* repository. You will not need to repeat this process on your local computer. See the :ref:`DocumentationWebsiteCreateNewTutorialGithubWorkflow` section for a description of the workflow you will use to make changes to the repository.
 
 .. _DocumentationWebsiteCreateNewTutorialGithubWorkflow:
 
-Git reposotory - General workflow
+Git repository - General workflow
 ---------------------------------
-This section describes the general workflow that is used when making changes to a git repository. This assumes that you already have a :ref:`clone<DocumentationWebsiteCreateNewTutorialGithub>` of a repository. This section describes how to use built-in tools in the text editor *PyCharm*. Experienced users may use their preferred means of *pulling* and *pushing* changes to the repository.
+This section describes the general workflow that is used when making changes to a git repository. This assumes that you already have already :ref:`forked and cloned<DocumentationWebsiteCreateNewTutorialGithub>` the repository. This section describes how to use built-in tools in the text editor *vscode*. Experienced users may use their preferred text editor and means of *pulling* and *pushing* changes to the repository.
 
-#) You will *clone* the repository onto your local computer. This is done once.
-#) e
-#) Make changes to the files in the repository
-#) *commit* your changes. This is 
+#) Update your local version of the repository to the current version with the *pull* command/operation.
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow1a.png
+        :width: 400px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        First click the *Source Control* tab/button, then the *More Actions* button, then *Pull*
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow1b.png
+        :width: 200px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        Alternatively, open a terminal (or a command window in Windows) and change directory to the repository directory, and enter the command ``git pull``
+
+#) Make interesting and useful changes and/or additions on your local computer with whatever text editor you prefer. Both *vscode* and *PyCharm* offer several features that are useful, and this section will use *vscode* as a demonstration.
+#) If you are using *vscode*, then *stage* the files that you have changed (note that this takes care of *adding* the file to git version control).
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow2a.png
+        :width: 300px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        In *vscode* stage any changes that you plan on committing to the repository.
+
+#) Give a brief commit message, then click the commit button.
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow2b.png
+        :width: 300px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        Enter a message, then click the *commit* button.
+
+#) Repeat the previous steps as needed. You can make multiple commits before you *Push* your changes.
+#) *Push* your changes to your *fork* of the repository. Enter your username and password when prompted.
+    
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow2c.png
+        :width: 300px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        Push your committed changes.
+
+#) Continue to add new files or change existing files, and follow the previous steps as needed. Go to the next step when you want to put your changes into the main public repository.
+#) After you have *pushed* your changes to your forked repository, go to your account on github.com and create a *New Pull Request*. Then click *Create pull request*. Add any additional comments, then click *Create pull request*.
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow3a.png
+        :width: 300px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
+
+        Create a new pull request.
+
+    .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow3b.png
+        :width: 400px
+        :align: center
+        :alt: alternate text
+        :figclass: align-center
 
 
-#) Open the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_)
+.. _DocumentationWebsiteCreateNewTutorialCreateDocument:
 
 Creating a Document
 '''''''''''''''''''
-To create a new document/webpage, first you should create a text file with a ``.rst`` extension somewhere in the ``path/to/CHMS_website/ChmsTutorials/source`` directory. To keep things organized, create this file in an appropriate directory. For example, put *general python* documentation in ``path/to/CHMS_website/ChmsTutorials/source/Python/General``. Note, a text editor such as :ref:`PyCharm<PythonGeneralPythonSetup>` or ``Visual Studio Code`` can have reStructuredText extensions installed to provide syntax highlighting and other convenient features.
+To create a new document/webpage, first you should create a text file with a ``.rst`` extension somewhere in the ``path/to/ChmsTutorials/source`` directory. To keep things organized, create this file in an appropriate directory. For example, put *general python* documentation in ``path/to/ChmsTutorials/source/Python/General``. Note, a text editor such as :ref:`PyCharm<PythonGeneralPythonSetup>` or ``Visual Studio Code`` can have reStructuredText extensions installed to provide syntax highlighting and other convenient features.
 
 .. Note:: The name of the new document can be arbitrarily assigned. However to keep things organized, please give the document a relevant and descriptive name.
 
 Including Document/Tutorial in website
 --------------------------------------
-``toctree`` is used to organize the different tutorials and provide links to the main Tutorials webpage. The content of the main Tutorials webpage is in ``path/to/CHMS_website/ChmsTutorials/source/index.rst``. *index.rst* contains a *toctree* that links to pages that are used to organize high-level content. For example, the following code-block is in *index.rst*, and it links to ``path/to/CHMS_website/ChmsTutorials/source/Python/PythonTutorials.rst`` and ``path/to/CHMS_website/ChmsTutorials/source/Documentation/DocumentationTutorials.rst``
+``toctree`` is used to organize the different tutorials and provide links to the main Tutorials webpage. The content of the main Tutorials webpage is in ``path/to/ChmsTutorials/source/index.rst``. *index.rst* contains a *toctree* that links to pages that are used to organize high-level content. For example, the following code-block is in *index.rst*, and it links to ``path/to/ChmsTutorials/source/Python/PythonTutorials.rst`` and ``path/to/ChmsTutorials/source/Documentation/DocumentationTutorials.rst``
 
 .. code-block:: none
 
@@ -112,18 +187,18 @@ You can use other tutorials as an example for the content. You can see the conte
 
 Building a Document
 '''''''''''''''''''
-To build the documentation, open a terminal (or a command window in Windows), and navigate to the directory ``path/to/CHMS_website/ChmsTutorials``, and enter this command:
+To build the documentation, open a terminal (or a command window in Windows), and navigate to the directory ``path/to/ChmsTutorials``, and enter this command:
 
 .. code-block:: none
 
-    sphinx-build -b dirhtml source ../chms/tutorials
+    sphinx-build -b dirhtml source chms
 
-This command means the following: ``sphinx-build`` calls the program that is used to build the documentation. ``-b dirhtml`` specifies that the builder name is ``dirhtml``. The ``dirhtml`` builder makes HTML pages. ``source`` specifies that the source code is in the directory names ``source``. ``../chms/tutorials`` is a relative path to the directory where the .html files are built in. See `<https://www.sphinx-doc.org/en/1.2/invocation.html>`_ for more information.
+This command means the following: ``sphinx-build`` calls the program that is used to build the documentation. ``-b dirhtml`` specifies that the builder name is ``dirhtml``. The ``dirhtml`` builder makes HTML pages. ``source`` specifies that the source code is in the directory named ``source``. ``chms`` the directory where the .html files are built in. See `<https://www.sphinx-doc.org/en/1.2/invocation.html>`_ for more information.
 
 When you build a document, you are generating html code from the reStructuredText files that you have created. These changes are only made on your computer, and there are two ways to view the documents/changes that you have made.
 
-    #) Manually open ``path/to/CHMS_website/chms/index.html`` in a web browser, then navigate to the page that you create/changed.
-    #) More experienced users can run a local server. Open a terminal (or a command window in Windows), and change directory to ``path/to/CHMS_website/chms``. Enter the command ``python -m http.server`` and in a web browser, go to the website ``http://localhost:8000/``. Navigate to the page that you create/changed.
+    #) Manually open ``path/to/ChmsTutorials/chms/index.html`` in a web browser, then navigate to the page that you create/changed.
+    #) More experienced users can run a local server. Open a terminal (or a command window in Windows), and change directory to ``path/to/ChmsTutorials/chms``. Enter the command ``python -m http.server`` and in a web browser, go to the website ``http://localhost:8000/``. Navigate to the page that you create/changed.
 
 .. _DocumentationWebsiteCreateNewTutorialExample:
 
@@ -169,7 +244,7 @@ First, you should :ref:`clone the ChmsTutorials repository<DocumentationWebsiteC
 
     .. NOTE:: Indentations are used to specify the contents of ``.. toctree::``.
 
-#) Open a terminal (or a command window in Windows). Change directroy to ``path/to/CHMS_website/ChmsTutorials``
+#) Open a terminal (or a command window in Windows). Change directroy to ``path/to/ChmsTutorials``
 
     .. figure:: /Documentation/img/WebsiteTutorialExampleChangeDirectory.png
         :width: 500px
@@ -185,7 +260,7 @@ First, you should :ref:`clone the ChmsTutorials repository<DocumentationWebsiteC
 
         sphinx-build -b dirhtml source ../chms/tutorials
 
-#) Check the changes. Open a browser, press ``Ctrl+o`` and open ``path/to/CHMS_website/chms/tutorials/index.html``. Then naviage to ``Tutorials > Documentation Tutorials > Website Tutorials > Test header!!!``
+#) Check the changes. Open a browser, press ``Ctrl+o`` and open ``path/to/ChmsTutorials/chms/index.html``. Then naviage to ``Tutorials > Documentation Tutorials > Website Tutorials > Test header!!!``
 
     .. figure:: /Documentation/img/WebsiteTutorialsHelloWorldLink.png
         :width: 600px

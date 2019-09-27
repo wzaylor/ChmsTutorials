@@ -7,7 +7,7 @@ This page organizes the different CHMS Website documentation tutorials.
 
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Contents:
 
     /Documentation/Website_tutorials/CreateNewTutorial.rst
