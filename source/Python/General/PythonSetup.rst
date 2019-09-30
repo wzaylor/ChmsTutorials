@@ -29,7 +29,7 @@ Both Anaconda and PyCharm are larger packages and installations. Experienced use
 
 .. NOTE:: When installing Anaconda, you may get this step. Check the box *Add Anaconda to my PATH environment variable* if you are unfamiliar with the use of the PATH environment. Experienced users can decide if they want to add Anaconda to their path during the installation, or at a later time.
 
-    .. figure:: ../img/General/PythonInstallWizard.png
+    .. figure:: /Python/img/General/PythonInstallWizard.png
         :width: 300px
         :align: center
         :alt: alternate text

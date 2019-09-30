@@ -8,13 +8,47 @@ The purpose of this tutorial is to describe how to use Sphinx to create/build a 
 
 These tutorials are written in reStructredText, and a program called Sphinx is used to convert reStructuredText files into .html format. The html files can be directly loaded onto the lab website. This allows for a wiki-style documentation.
 
-This tutorial first describes what :ref:`software<DocumentationWebsiteCreateNewTutorialSoftware>` is needed, then how to :ref:`fork<DocumentationWebsiteCreateNewTutorialGithub>` the ChmsTurorials repository. There is a section that describes how to :ref:`create<DocumentationWebsiteCreateNewTutorialCreateDocument>` a page on the website, and there is a hello_world :ref:`example<DocumentationWebsiteCreateNewTutorialExample>`.
+This tutorial first describes what :ref:`software<DocumentationWebsiteCreateNewTutorialSoftware>` is needed, then how to :ref:`fork<DocumentationWebsiteCreateNewTutorialGithub>` the ChmsTurorials repository. Once users have a local copy of the repository, they can refer to the section that describes how to :ref:`create<DocumentationWebsiteCreateNewTutorialCreateDocument>` a page on the website. This docuemnt also includes a walkthrough that describes how to create an :ref:`example<DocumentationWebsiteCreateNewTutorialExample>` webpage.
 
 .. _DocumentationWebsiteCreateNewTutorialSoftware:
 
 Software
 ''''''''
-placeholder
+There are three software packages that are used when generating the tutorials documentaiton:
+
+#) :ref:`Python<DocumentationWebsiteCreateNewTutorialSoftwarePython>` with the *Sphinx* module installed (required)
+#) :ref:`Git<DocumentationWebsiteCreateNewTutorialSoftwareGit>`, this is used to manage the repository that stores the tutorials source files (required).
+#) *PyCharm* or *vscode*, these are used as :ref:`text editors <DocumentationWebsiteCreateNewTutorialSoftwareTextEditor>` (not required). 
+
+.. _DocumentationWebsiteCreateNewTutorialSoftwarePython:
+
+Python
+------
+The documentation is written using reStructuredText files, and these files are built into *.html* pages using a Python module called Sphinx. Users unfamiliar with Python can follow the :ref:`Python Setup<PythonGeneralPythonSetup>` documentation to install *Anaconda*. Installing *Anaconda* will also install the *Sphinx* module.
+
+.. _DocumentationWebsiteCreateNewTutorialSoftwareGit:
+
+Git
+---
+A repository has been setup to enable collaboration on the *CHSM Tutorials* documentation. Users can manage this repository using *Git*. 
+
+For Windows users, download *Git* from here, `<https://git-scm.com/>`_, and install the file.
+
+For linux/ubuntu users, open a terminal and enter these commands to install git using ``apt``
+
+.. code-block:: none
+
+    sudo apt install git
+
+.. _DocumentationWebsiteCreateNewTutorialSoftwareTextEditor:
+
+Text editor
+-----------
+The reStructuredText files that are used to create the tutorials can be edited with a simple text editor. IDEs such as *PyCharm* and *vscode* have different features that make life easier, and both of these IDEs have the ability to manage a :ref:`git<DocumentationWebsiteCreateNewTutorialSoftwareGit>`. 
+
+Users who have installed *PyCharm* during :ref:`python setup<PythonGeneralPythonSetup>` will already have the reStructuredText plugin installed by default. This enables syntax highlighting for .rst documents. The repository can be managed from *PyCharm* in a similar way as described in the :ref:`git repository workflow<DocumentationWebsiteCreateNewTutorialGithubWorkflow>` section by right clickling file names and selecting the ``git`` option.
+
+Users can also install *vscode* (`<https://code.visualstudio.com/>`_) to create and edit reStructuredText files in the repository.
 
 .. _DocumentationWebsiteCreateNewTutorialGithub:
 
@@ -25,16 +59,7 @@ You will clone the repository to your local computer once. This is different fro
 These tutorials are stored on a public repository located here: `<https://github.com/CSU-CHMS/ChmsTutorials>`_. For users who are unfamiliar with using a git repository, please follow the instructions below to *fork* then *clone* the repository. After you have *forked* and *cloned* the repository, see the :ref:`DocumentationWebsiteCreateNewTutorialGithubWorkflow` section for a description of the general workflow you will use to add and update files in the repository.
 
 #) Create an account on github (`<https://github.com/join>`_)
-#) Download and install *git*
-    
-    For Windows users, download from here, `<https://git-scm.com/>`_, and install the file.
-
-    For linux/ubuntu users, open a terminal and enter these commands to install git using ``apt``
-    
-    .. code-block:: none
-
-        sudo apt install git
-
+#) Download and install :ref:`Git<DocumentationWebsiteCreateNewTutorialSoftwareGit>`
 #) Go the the repository (`<https://github.com/CSU-CHMS/ChmsTutorials>`_) and click the fork link. *Forking* the repository allows you to clone the repository, then after you make changes locally, you can submit a *pull request*, which is described :ref:`here<DocumentationWebsiteCreateNewTutorialGithubWorkflow>`.
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubClone1.png
