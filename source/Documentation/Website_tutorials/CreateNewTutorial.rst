@@ -148,7 +148,7 @@ This section describes the general workflow that is used when making changes to 
         Push your committed changes.
 
 #) Continue to add new files or change existing files, and follow the previous steps as needed. Go to the next step when you want to put your changes into the main public repository.
-#) After you have *pushed* your changes to your forked repository, go to your account on github.com and create a *New Pull Request*. Then click *Create pull request*. Add any additional comments, then click *Create pull request*.
+#) After you have *pushed* your changes to your forked repository, go to your account on github.com and create a *New Pull Request*. Then click *Create pull request*. Add any additional comments, then click *Create pull request*. Note that the web address is likely something similar to ``github.com/userName/ChmsTutorials``
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow3a.png
         :width: 300px
@@ -156,7 +156,7 @@ This section describes the general workflow that is used when making changes to 
         :alt: alternate text
         :figclass: align-center
 
-        Create a new pull request.
+        Create a new pull request. Note the web address.
 
     .. figure:: /Documentation/img/WebsiteTutorialGithubWorkflow3b.png
         :width: 400px
