@@ -8,3 +8,4 @@ Matlab General Tutorials
     :maxdepth: 2
     :caption: Contents:
 
+    /Matlab/General/DifferentialEquationSolve.rst

@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Numerical Solutions of Differential Equations &#8212; CHMS Tutorials 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Controls Tutorials" href="../../../Controls/Controls/" />
+    <link rel="prev" title="Matlab General Tutorials" href="../General/" />
+<link href="/images/siteimages/favicon.ico" rel="shortcut icon">
+    <title>Center for Human-Machine Systems</title>
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+    </script>
+    <!-- Include all compiled plugins (below), or include individual files as needed --> 
+    <script src="/js/bootstrap.js"></script>
+    <script> 
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous">
+  </script>
+  <!-- Include all compiled plugins (below), or include individual files as needed --> 
+  <script> 
+  $(function(){
+      $("#header").load("/header.html"); 
+      $("#footer").load("/footer.html"); 
+  });
+  </script> 
+  
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+
+  </head><body>
+<!-- Put the header here! -->
+    <!-- ********************************************** -->
+    <div id="header"></div>
+    <!-- ********************************************** -->
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="numerical-solutions-of-differential-equations">
+<span id="matlabgeneraldifferentialequationsolve"></span><h1>Numerical Solutions of Differential Equations<a class="headerlink" href="#numerical-solutions-of-differential-equations" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial is adapted from a seminar handout originally authored by Sandy Hnat, Anne Koelewijn, and Huawei Wang.</p>
+<div class="section" id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial, we will use MATLAB to simulate a dynamics problem. Code blocks are provided for each step.</p>
+</div>
+<div class="section" id="problem">
+<h2>Problem<a class="headerlink" href="#problem" title="Permalink to this headline">¶</a></h2>
+<p>We will look at a simple spring damper problem, which is shown in the figure below.</p>
+<div class="align-center figure" id="id1">
+<a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamper.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamper.png" style="width: 300px;" /></a>
+<p class="caption"><span class="caption-text">Mass-spring-damper system</span></p>
+</div>
+<p>The equation of motion of this system is as follows:</p>
+<div class="math notranslate nohighlight">
+\[m\ddot{q} + b\dot{q} + kq = 0\]</div>
+<p>where the mass m = 1 kg, the damping coefficient c = 2 Ns/m and the stiffness constant is k = 5 N/m.</p>
+</div>
+<div class="section" id="solution">
+<h2>Solution<a class="headerlink" href="#solution" title="Permalink to this headline">¶</a></h2>
+<p>This equation of motion is quite simple and could be solved analytically by solving the differential equation. However, we are going to solve this equation numerically. Later, we will use the analytical solution to see how well our numerical methods work.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code to define constant paramters here:</span>
+<span class="n">m</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="n">c</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="n">k</span> <span class="p">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>Convert high oder differential equation to first order differential equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+    x_1 &amp;= x \\
+    x_2 &amp;= \dot{x} \\
+    \begin{bmatrix} \dot{x_1}\\ \dot{x_2} \end{bmatrix} &amp;= \begin{bmatrix} 0 &amp; 1 \\ -\frac{k}{m} &amp; -\frac{c}{m} \end{bmatrix} \begin{bmatrix} x_1\\ x_2 \end{bmatrix}
+\end{split}\end{split}\]</div>
+<p>Change the first order differential equation into incremental format:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix} \Delta x_1 \\ \Delta x_2 \end{bmatrix} =
+\begin{bmatrix} 0 &amp; 1 \\ -\frac{k}{m} &amp; -\frac{c}{m} \end{bmatrix}
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \cdot \Delta t\end{split}\]</div>
+<p>Use for loop to numerically calculate the motion of the mass-spring-damper system. Let’s set total time of calculation to 6 sconds, <span class="math notranslate nohighlight">\(\Delta t =0.1\)</span> second, <span class="math notranslate nohighlight">\(x(0) = [1, 0]^T\)</span>.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code to numerically calcuate system trajectory here:</span>
+<span class="n">T</span> <span class="p">=</span> <span class="mi">6</span><span class="p">;</span>
+<span class="n">dt</span> <span class="p">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="n">x0</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]</span><span class="o">&#39;</span>  <span class="c">% x0 = [1; 0]</span>
+<span class="n">t</span> <span class="p">=</span> <span class="mi">0</span><span class="p">:</span><span class="n">dt</span><span class="p">:</span><span class="n">T</span><span class="p">;</span>
+<span class="n">x_save</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="n">x_save</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">x0</span><span class="p">;</span>
+
+<span class="k">for</span> <span class="nb">i</span> <span class="p">=</span> <span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">dx</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span> <span class="o">-</span><span class="n">k</span><span class="o">/</span><span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="n">c</span><span class="o">/</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">x_save</span><span class="p">(:,</span> <span class="nb">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+    <span class="n">x_save</span><span class="p">(:,</span> <span class="nb">i</span><span class="p">)</span> <span class="p">=</span> <span class="n">x_save</span><span class="p">(:,</span><span class="nb">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dx</span><span class="p">;</span>
+
+<span class="k">end</span>
+
+<span class="n">x_save</span>
+</pre></div>
+</div>
+<p>Plot the calculated result using plot command:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write plot code here</span>
+<span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_save</span><span class="p">(</span><span class="mi">1</span><span class="p">,:),</span> <span class="s">&#39;ro-&#39;</span><span class="p">);</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">);</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;X(t) (m)&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Compare with the analytical solution:</p>
+<div class="math notranslate nohighlight">
+\[x = c_1e^{-t} \cdot sin(2t) + c_2 e^{-t}cos(2t)\]</div>
+<p>With starting point <span class="math notranslate nohighlight">\([1, 0]\)</span>, then <span class="math notranslate nohighlight">\(c_1 = 0.5\)</span>, <span class="math notranslate nohighlight">\(c_2 = 1\)</span>.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code calculate analytic motion data here</span>
+<span class="n">x_real</span> <span class="p">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">.*</span><span class="nb">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">.*</span><span class="nb">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="c">% Write code to plot analytic motion into previous plot</span>
+<span class="n">hold</span> <span class="n">on</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_real</span><span class="p">,</span> <span class="s">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">(</span><span class="s">&#39;numerical solution&#39;</span><span class="p">,</span> <span class="s">&#39;analytical solution&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">off</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id2">
+<a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot1.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot1.png" style="width: 300px;" /></a>
+<p class="caption"><span class="caption-text">Analytical and numerical solution for the mass’ position vs. time.</span></p>
+</div>
+<p><strong>Why are these different?</strong></p>
+<p>Zoom in to the beginning of the plot to see the difference at the second point in the numerical solution.</p>
+<p><strong>Reason</strong>: Use the derivative of one point and assume it works for all following points in .
+<strong>Solution 1</strong>:  using smaller <span class="math notranslate nohighlight">\(\Delta t\)</span></p>
+<p><strong>Solution 2</strong>: estimate more accurate increment of <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<div class="align-center figure" id="id3">
+<a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot2.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot2.png" style="width: 200px;" /></a>
+<p class="caption"><span class="caption-text">The first few points of the analytical and numerical solutions showing the difference in solutions.</span></p>
+</div>
+<p>Instead of using the derivative of time <span class="math notranslate nohighlight">\(t\)</span> to calculate the increments of <span class="math notranslate nohighlight">\(t + \Delta t\)</span> comparing to time <span class="math notranslate nohighlight">\(t\)</span>. Value of <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> is calculated first and then use the derivative of time <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> to calculate the increments of <span class="math notranslate nohighlight">\(t + \Delta t\)</span> comparing to time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>Therefore, in the for loop, the value of <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> needs to be calculated first.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code of middle point ODE solver here</span>
+<span class="n">x_save_mid</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="n">x_save_mid</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">x0</span><span class="p">;</span>
+<span class="k">for</span> <span class="nb">j</span> <span class="p">=</span> <span class="mi">2</span><span class="p">:</span><span class="nb">length</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">dx_half</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span> <span class="o">-</span><span class="n">k</span><span class="o">/</span><span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="n">c</span><span class="o">/</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">x_save_mid</span><span class="p">(:,</span> <span class="nb">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">x_half</span> <span class="p">=</span> <span class="n">x_save_mid</span><span class="p">(:,</span> <span class="nb">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dx_half</span><span class="p">;</span>
+
+    <span class="n">dx</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span> <span class="o">-</span><span class="n">k</span><span class="o">/</span><span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="n">c</span><span class="o">/</span><span class="n">m</span><span class="p">]</span><span class="o">*</span><span class="n">x_half</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+    <span class="n">x_save_mid</span><span class="p">(:,</span> <span class="nb">j</span><span class="p">)</span> <span class="p">=</span> <span class="n">x_save_mid</span><span class="p">(:,</span> <span class="nb">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dx</span> <span class="p">;</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Then plot the motion comparing with real motion:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code to compare the previous result with real motion</span>
+<span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_save_mid</span><span class="p">(</span><span class="mi">1</span><span class="p">,:),</span> <span class="s">&#39;ro-&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;X(t) (m)&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">on</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_real</span><span class="p">,</span> <span class="s">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">(</span><span class="s">&#39;numerical solution&#39;</span><span class="p">,</span> <span class="s">&#39;analytical solution&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">off</span>
+</pre></div>
+</div>
+<div class="align-center figure" id="id4">
+<a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot3.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot3.png" style="width: 200px;" /></a>
+<p class="caption"><span class="caption-text">The analytical and the numberical solution of mass position vs time. Note that this plot was generated using the middle point ODE solver in the numerical solution.</span></p>
+</div>
+<p>More higher order ode solving method can be seen here:</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods</a></p>
+<p>Matlab provide tool functions in ode solver:</p>
+<p><a class="reference external" href="http://www.mathworks.com/help/matlab/math/choose-an-ode-solver.html">http://www.mathworks.com/help/matlab/math/choose-an-ode-solver.html</a></p>
+<p>Let’s try to use ode45 to solve the difference equation mass-spring-damper system. The explaination of ode45 can be found here:</p>
+<p><a class="reference external" href="https://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=ode45&amp;s_tid=doc_srchtitle">https://www.mathworks.com/help/matlab/ref/ode45.html?searchHighlight=ode45&amp;s_tid=doc_srchtitle</a></p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write ode45 code to calculate the system motion numerically</span>
+<span class="n">Tspan</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">];</span>
+<span class="n">x0</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">&#39;</span><span class="p">;</span>
+
+<span class="p">[</span><span class="n">t_ode45</span><span class="p">,</span> <span class="n">x_ode45</span><span class="p">]</span> <span class="p">=</span> <span class="n">ode45</span><span class="p">(@</span><span class="n">MSD</span><span class="p">,</span> <span class="n">Tspan</span><span class="p">,</span> <span class="n">x0</span><span class="p">);</span>
+
+<span class="c">% Write code to plot ode45 result here</span>
+<span class="n">figure</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t_ode45</span><span class="p">,</span> <span class="n">x_ode45</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">),</span> <span class="s">&#39;ro-&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;X(t) (m)&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">on</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_real</span><span class="p">,</span> <span class="s">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">(</span><span class="s">&#39;numerical solution&#39;</span><span class="p">,</span> <span class="s">&#39;analytical solution&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">off</span>
+</pre></div>
+</div>
+<p>Let’s play around the options:</p>
+<p><a class="reference external" href="http://www.mathworks.com/help/matlab/ref/odeset.html">http://www.mathworks.com/help/matlab/ref/odeset.html</a></p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Write code to set ode options and recalcualte using these options</span>
+<span class="n">options</span> <span class="p">=</span> <span class="n">odeset</span><span class="p">(</span><span class="s">&#39;AbsTol&#39;</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">)</span>
+<span class="p">[</span><span class="n">t_ode45_opt</span><span class="p">,</span> <span class="n">x_ode45_opt</span><span class="p">]</span> <span class="p">=</span> <span class="n">ode113</span><span class="p">(@</span><span class="n">MSD</span><span class="p">,</span> <span class="n">Tspan</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+<span class="c">% Write code to plot new ode45 result here</span>
+<span class="n">figure</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t_ode45_opt</span><span class="p">,</span> <span class="n">x_ode45_opt</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">),</span> <span class="s">&#39;ro-&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;X(t) (m)&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">on</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x_real</span><span class="p">,</span> <span class="s">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">(</span><span class="s">&#39;numerical solution&#39;</span><span class="p">,</span> <span class="s">&#39;analytical solution&#39;</span><span class="p">)</span>
+<span class="n">hold</span> <span class="n">off</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../">CHMS Tutorials</a></h1>
+
+
+
+
+
+
+
+
+
+<h3><a href="../../../">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Python/Python/">Python Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Matlab/">Matlab Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Controls/Controls/">Controls Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Mechanics/Mechanics/">Mechanics Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Documentation/Documentation/">Documentation Tutorials</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../">Documentation overview</a><ul>
+  <li><a href="../../Matlab/">Matlab Tutorials</a><ul>
+  <li><a href="../General/">Matlab General Tutorials</a><ul>
+      <li>Previous: <a href="../General/" title="previous chapter">Matlab General Tutorials</a></li>
+      <li>Next: <a href="../../../Controls/Controls/" title="next chapter">Controls Tutorials</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search/" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<!-- Put the footer here! -->
+
+    <div class="footer">
+      &copy;2019, Center for Human-Machine Systems.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/Matlab/General/DifferentialEquationSolve.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+
+    <!-- ********************************************** -->
+    <div id="footer"></div>
+    <!-- ********************************************** -->
+
+  </body>
+</html>
