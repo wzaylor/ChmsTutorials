@@ -43,6 +43,12 @@ extensions = [
     'sphinx.ext.viewcode',
 ]
 
+# Allow for numbering of figures and equations.
+numfig = True
+math_numfig = True
+numfig_secnum_depth = 2
+math_eqref_format = "Eq.{number}"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
