@@ -85,7 +85,7 @@ second term by parts
 
 .. math:: \int_a^b \frac{\partial F}{\partial u_0'}v' dx = \frac{\partial F}{\partial u_0'}v|_a^b - \int_a^b v\frac{d}{dx}\Big(\frac{\partial F}{\partial u_0'} \Big)dx
 
- Substituting the above equation into :eq:`eq:asideMinimum1`, and recalling
+Substituting the above equation into :eq:`eq:asideMinimum1`, and recalling
 :eq:`eq:asideVariationBCs`.
 
 .. math::
