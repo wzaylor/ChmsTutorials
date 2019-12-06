@@ -10,4 +10,4 @@ The section is under development...
     :maxdepth: 2
     :caption: Contents:
 
-    FiniteElementFormulation/FiniteElementFormulation
+    /Mechanics/FiniteElement/FiniteElementFormulation/FiniteElementFormulation.rst
