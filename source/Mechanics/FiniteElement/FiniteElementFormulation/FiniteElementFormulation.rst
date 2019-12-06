@@ -11,6 +11,6 @@ The section is under development...
     :numbered:
     :caption: Contents:
 
-    VirtualWork
-    VariationalFormulation
+    /Mechanics/FiniteElement/FiniteElementFormulation/VirtualWork.rst
+    /Mechanics/FiniteElement/FiniteElementFormulation/VariationalFormulation.rst
     

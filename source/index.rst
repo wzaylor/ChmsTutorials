@@ -5,6 +5,10 @@
 
 Welcome to CHMS Tutorials
 =========================
+Recently Added Tutorials
+""""""""""""""""""""""""
+    * 3D visualization using Python :ref:`Python3DVisualization`
+
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
