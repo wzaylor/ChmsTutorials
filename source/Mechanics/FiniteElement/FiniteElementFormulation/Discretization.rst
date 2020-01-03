@@ -137,7 +137,7 @@ We can use this mapping to define the coordinates of a point inside the isoparam
 
 Isoparametric Element - Displacement Gradient
 '''''''''''''''''''''''''''''''''''''''''''''
-Recall that the displacement was approximated using :eq:`fea:displacementApproximation`. Also recall from :ref:`FiniteElementFormulationKinematics` that the strain is a function of displacements where the gradient of the displacenent is taken with respect to the reference configuration. Therefore, we need to define :math:`\frac{\partial u}{\partial X_A
+Recall that the displacement was approximated using :eq:`fea:displacementApproximation`. Also recall from :ref:`FiniteElementFormulationKinematics` that the strain is a function of displacements where the gradient of the displacenent is taken with respect to the reference configuration. Therefore, we need to define :math:`\frac{\partial u}{\partial X_A}`
 
 From the example at the end of the :ref:`FiniteElementFormulationDiscretizationIsoparametricElement` section, we showed that we can define the coordinates of a point within a mesh element (point :math:`X_A` defined in :math:`\Omega_e`) given the mesh element's nodal coordinates and the coordinates of a point within the isoparametric element (point :math:`\theta_i` defined in :math:`\Omega_\Box`). How would the coordinates of a point defined in :math:`\Omega_e` change as we change the coordinates of the corresponding point in :math:`\Omega_\Box`? Put another way, what is the gradient of point :math:`X_A` with respect to the isoparametric element's coordinate system? We will call this gradient :math:`J^\Box_{A\alpha}`.
 
