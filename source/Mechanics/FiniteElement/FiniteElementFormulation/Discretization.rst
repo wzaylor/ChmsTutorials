@@ -4,6 +4,8 @@ Discretization
 """"""""""""""
 We first need to discretize the :ref:`variational form<FiniteElementFormulationVariationalFormulation>` (:eq:`fea:weakFormulation`) before we can solve for the field variable (in this case displacements) that satisfy the :ref:`variational form<FiniteElementFormulationVariationalFormulation>`.
 
+.. _FiniteElementFormulationDiscretizationBodyDiscretization:
+
 .. figure:: /Mechanics/FiniteElement/FiniteElementFormulation/img/PotatoDiscretization.png
     :width: 300px
     :align: center
@@ -22,10 +24,21 @@ Where the assembly of the elements is described further in the :ref:`FiniteEleme
 The primary field variable (which is displacements in these tutorials) is approximated using interpolation functions. This interpolation is done across each element.
 
 .. math::
-    \bar{u}_i(X) \approx \hat{u}_i(X) = \sum_{I=1}^{n_n} N^I(X) u^I_i
+    \bar{u}_A(X) \approx \hat{u}_A(X) = \sum_{I=1}^{n_n} N^I(X) u^I_A
     :label: fea:displacementApproximation
 
-Where :math:`\bar{u}_i` is the exact solution, :math:`\hat{u}_i` is the approximate solution, and :math:`u^I_i` is displacement for the :math:`I` node in the element. The values for :math:`u^I_i` are the unknown quantities in the finite element formulation. The shape functions (:math:`N^I`) are defined in the element (:math:`\Omega_e`). Notice how :math:`N^I(X)` is a function of the coordinates with respect to the reference coordinate system (:math:`X`). If we used this definition for the shape functions (:math:`N^I`), then we would need to define a unique set of shape functions for every element, and this would be cumbersome. To avoid this issue, we can map the elements in the :math:`X` domain (:math:`\Omega_e`) to a single reference element (:math:`\Omega_{\Box}`) using isoparametric mapping.
+Where :math:`\bar{u}_A` is the exact solution, :math:`\hat{u}_A` is the approximate solution, and :math:`u^I_A` is displacement for the :math:`I` node in the element. The values for :math:`u^I_A` are the unknown quantities in the finite element formulation. The shape functions (:math:`N^I`) are defined in the element (:math:`\Omega_e`). 
+
+Recall from :ref:`FiniteElementFormulationKinematics` that the strain is a function of displacements where the gradient of the displacenent is taken with respect to the reference configuration. Therefore, we need to define :math:`\frac{\partial u_A}{\partial X_B}`. Substituting :eq:`fea:displacementApproximation` into the partial derivative (and noticing how :math:`u_A` is not a function of :math:`X`)
+
+.. math::
+    \begin{split}
+    \frac{\partial \hat{u}_A}{\partial X_B} &= \frac{\partial}{\partial X_B}\Big[\sum_{I=1}^{n_n} N^I(X) u^I_A \Big] \\
+    &= \sum_{I=1}^{n_n} u^I_A \frac{\partial N^I(X)}{\partial X_B}
+    \end{split}
+    :label: fea:displacementGradientApproximation1
+
+Before we solve for :math:`\frac{\partial N^I}{\partial X_B}`, we should notice that :math:`N^I(X)` is a function of the coordinates with respect to the reference coordinate system (:math:`X`). *If we used this definition for the shape functions* (:math:`N^I`), *then we would need to define a unique set of shape functions for every element, and this would be cumbersome.* To avoid this issue, we can map the elements in the :math:`X` domain (:math:`\Omega_e`) to a single reference element (:math:`\Omega_{\Box}`) using isoparametric mapping.
 
 .. _FiniteElementFormulationDiscretizationIsoparametricElement:
 
@@ -76,11 +89,11 @@ These tutorials will only demonstrate eight noded hexahedral element, therefore 
 We can use this mapping to define the coordinates of a point inside the isoparametric element to the corresponding coordinates inside the mesh element.
 
 .. math::
-    X_i = \sum_{I=1}^{n_n} N^I(\theta)X^I_i
+    X_i = \sum_{I=1}^{n_n} N^I(\theta)X^I_A
 
 .. seealso::
     **Example**:
-    Consider an element with the following coordinates (the node numbers correspond to those in :numref:`fig:feaIsoparametricElement`. Calculate the coordinates of the point :math:`\theta = (0.5, 0, 0)` (which exists in :math:`\Omega_{\Box}`) in the mesh element's coordinate system (:math:`x`).:
+    Consider an element with the following coordinates (the node numbers correspond to those in :numref:`fig:feaIsoparametricElement`. Calculate the coordinates of the point :math:`\theta = (0.5, 0, 0)` (which exists in :math:`\Omega_{\Box}`) in the mesh element's coordinate system (:math:`X`).:
 
         .. csv-table:: The nodal coordinates of the given element.
 
@@ -98,84 +111,99 @@ We can use this mapping to define the coordinates of a point inside the isoparam
         The coordinates of the point is defined with the following equation.
 
     .. math::
-        X_i = \sum_{I=1}^{n_n} N^I(\theta)X^I_i
+        X_i = \sum_{I=1}^{n_n} N^I(\theta)X^I_A
 
-    For this example, we can define :math:`\bar{X}_i^I = N^I(\theta)X^I_i`.
+    For this example, we can define :math:`\bar{X}_A^I = N^I(\theta)X^I_A`.
 
     .. math::
         \begin{split}
-        X_i &= \sum_{I=1}^{n_n} N^I(\theta)X^I_i \\
-        &= \sum_{I=1}^{n_n} \bar{X}_i^I
+        X_A &= \sum_{I=1}^{n_n} N^I(\theta)X^I_A \\
+        &= \sum_{I=1}^{n_n} \bar{X}_A^I
         \end{split}
 
     For :math:`I=1`, we want to substitute :math:`\theta = (\xi^I,\eta^I,\zeta^I) = (0.5, 0, 0)` into :math:`N^1` from :eq:`fea:shapeFunctions` and the coordinates of the node that relates to the element node number 1, which is :math:`(X_1, X_2, X_3) = (10., -100., 1.)`.
 
     .. math::
         \begin{split}
-            \bar{X}_i^1 &= \frac{1}{8}(1 - \xi)(1 - \eta)(1 - \zeta)X_i^1 \\
+            \bar{X}_A^1 &= \frac{1}{8}(1 - \xi)(1 - \eta)(1 - \zeta)X_A^1 \\
             &= \frac{1}{8}(1 - 0.5)(1 - 0.)(1 - 0.)X_i^1 \\
-            &= 0.0625X_i^1 \\
+            &= 0.0625X_A^1 \\
             &= 0.0625\begin{bmatrix}10.\\ -100. \\ 1.\end{bmatrix} \\
             &= \begin{bmatrix}0.625\\ -6.252 \\ 0.0625\end{bmatrix}
         \end{split}
 
-    Similarly for :math:`I=2`, we can define :math:`\bar{X}^2_i` by substituting :math:`\theta = (0.5, 0, 0)` into :math:`N^2` from :eq:`fea:shapeFunctions` and the coordinates of the node that relates to the element node number 2, which is :math:`(X_1, X_2, X_3) = (11., -90., 0.)`.
+    Similarly for :math:`I=2`, we can define :math:`\bar{X}^2_A` by substituting :math:`\theta = (0.5, 0, 0)` into :math:`N^2` from :eq:`fea:shapeFunctions` and the coordinates of the node that relates to the element node number 2, which is :math:`(X_1, X_2, X_3) = (11., -90., 0.)`.
 
     .. math::
         \begin{split}
-            \bar{X}_i^2 &= \frac{1}{8}(1 + \xi)(1 - \eta)(1 - \zeta)X_i^1 \\
-            &= \frac{1}{8}(1 + 0.5)(1 - 0.)(1 - 0.)X_i^1 \\
+            \bar{X}_A^2 &= \frac{1}{8}(1 + \xi)(1 - \eta)(1 - \zeta)X_A^1 \\
+            &= \frac{1}{8}(1 + 0.5)(1 - 0.)(1 - 0.)X_A^1 \\
             &= 0.1875X_i^2 \\
             &= 0.1875\begin{bmatrix}11.\\ -90. \\ 0.\end{bmatrix} \\
             &= \begin{bmatrix}2.0625\\ -16.875 \\ 0.\end{bmatrix}
         \end{split}
 
-    Repeating this process for :math:`I=3,4,\ldots,8`, and sum :math:`\bar{X}_i^I` to determine :math:`X_i`. 
+    Repeating this process for :math:`I=3,4,\ldots,8`, and sum :math:`\bar{X}_A^I` to determine :math:`X_A`. 
 
+
+.. _FiniteElementFormulationDiscretizationIsoparametricElementMapping:
+
+Isoparametric Element - Mapping
+'''''''''''''''''''''''''''''''
+The derivative of the mapping from the isoparametric element coordiante system (:math:`\theta_\alpha`) to the reference coordinate system (:math:`X_A`) is denoted as :math:`J^\Box_{A\alpha}`.
+
+.. sidebar:: A note on notation
+
+    In :math:`J^\Box_{A\alpha}`, the superscript :math:`\Box` is used to differentiate this value from other Jacobian values that arise later. The subscript :math:`A` is capitolized to indicate the reference configuration (rather than the deformed configuration). Finally, the greek subscript :math:`\alpha` is used to indicate the isoparametric element's coordinate system.
+.. math::
+    J^\Box_{A\alpha} = \frac{\partial X_A}{\partial \theta_\alpha}
+
+
+.. _fig:feaIsoparametricElementJacobianMappingReference:
+.. figure:: /Mechanics/FiniteElement/FiniteElementFormulation/img/IsoparametricElementReferenceMapping.png
+    :width: 250px
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    The mapping from the isoparametric element coordinate system to the reference coordinate system.
+
+Recall from the :ref:`FiniteElementFormulationDiscretizationIsoparametricElement` section that :math:`X_A` can be expressed as :math:`X_i = \sum_{I=1}^{n_n} N^I(\theta)X^I_A`. Substituting this into the definition of :math:`J^\Box_{A\alpha}` (noting that the element's coordinates (:math:`X^I_A` are fixed values).
+
+.. math::
+    \begin{split}
+    J^\Box_{A\alpha} &= \frac{\partial X_A}{\partial \theta_\alpha} \\
+    &= \frac{\partial }{\partial \theta_\alpha} \Big[\sum_{I=1}^{n_n} N^I(\theta)X^I_A \Big] \\
+    &= \sum_{I=1}^{n_n}X^I_A\frac{\partial N^I(\theta)}{\partial \theta_\alpha}
+    \end{split}
+    :label: fea:isoparametricMappingReferenceConfiguration
+
+The mapping :math:`J^\Box_{A\alpha}` is fully defined because the element's coordiantes (:math:`X^I_A`) are already defined through discretization of the body (:numref:`FiniteElementFormulationDiscretizationBodyDiscretization`), and the shape functions for the isoparametric element are already defined (for example, :eq:`fea:shapeFunctions`). With these known values, we can define the components of the tensor :math:`J^\Box_{A\alpha}`.
 
 .. _FiniteElementFormulationDiscretizationIsoparametricElementDisplacementGradient:
 
 Isoparametric Element - Displacement Gradient
 '''''''''''''''''''''''''''''''''''''''''''''
-Recall that the displacement was approximated using :eq:`fea:displacementApproximation`. Also recall from :ref:`FiniteElementFormulationKinematics` that the strain is a function of displacements where the gradient of the displacenent is taken with respect to the reference configuration. Therefore, we need to define :math:`\frac{\partial u}{\partial X_A}`
+Recall that the displacement gradient was approximated in :eq:`fea:displacementGradientApproximation1`, and notice the partial derivative is defined with respect to the element's coordiantes (:math:`X_B`) and not isoparametric coordinates (:math:`\theta_\alpha)`. We want to express :math:`\frac{\partial N^I(X)}{\partial X_B}` in terms of isoparametric coordinates (:math:`\theta`).
 
-From the example at the end of the :ref:`FiniteElementFormulationDiscretizationIsoparametricElement` section, we showed that we can define the coordinates of a point within a mesh element (point :math:`X_A` defined in :math:`\Omega_e`) given the mesh element's nodal coordinates and the coordinates of a point within the isoparametric element (point :math:`\theta_i` defined in :math:`\Omega_\Box`). How would the coordinates of a point defined in :math:`\Omega_e` change as we change the coordinates of the corresponding point in :math:`\Omega_\Box`? Put another way, what is the gradient of point :math:`X_A` with respect to the isoparametric element's coordinate system? We will call this gradient :math:`J^\Box_{A\alpha}`.
-
-.. math::
-    J^\Box_{A\alpha} = \frac{\partial X_A}{\partial \theta_\alpha}
-
-.. Note::
-    **A note on notation**.
-    In :math:`J^\Box_{A\alpha}`, the superscript :math:`\Box` is used to differentiate this value from other Jacobian values that arise later. The subscript :math:`A` is capitolized to indicate the reference configuration (rather than the deformed configuration). Finally, the greek subscript :math:`\alpha` is used to indicate the isoparametric element's coordinate system.
-
-Recalling that :math:`X_A = \sum_{I=1}^{n_n} N^I(\theta)X^I_A`, the above equation can be rewritten.
+Using the chain rule, we can express :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` as a function of :math:`\frac{\partial N^I(X)}{\partial X_B}` (recalling the definition of :math:`J^\Box_{A\alpha}` in :eq:`fea:isoparametricMappingReferenceConfiguration`).
 
 .. math::
     \begin{split}
-    J^\Box_{A\alpha} &= \frac{\partial X_A}{\partial \theta_\alpha} \\
-    &= \frac{\partial}{\partial \theta_\alpha}\big[\sum_{I=1}^{n_n} N^I(\theta)X^I_A\big] \\
-    &= \sum_{I=1}^{n_n}X^I_A \Big(\frac{\partial N^I(\theta)}{\partial \theta_\alpha}\Big)
+    \frac{\partial N^I(\theta)}{\partial \theta_\alpha} &= \frac{\partial N^I(X)}{\partial X_B} \frac{\partial X_B}{\partial \theta_\alpha} \\
+    &= \frac{\partial N^I(X)}{\partial X_B}\Big[ \sum_{I=1}^{n_n}X^I_B\frac{\partial N^I(\theta)}{\partial \theta_\alpha} \Big] \\
+    &= \frac{\partial N^I(X)}{\partial X_B} J^\Box_{B\alpha}
     \end{split}
 
-For an eight noded quadrilateral element, there are eight shape functions (:eq:`fea:shapeFunctions`). For each shape function, :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` is a first order tensor value. This first order tensor is multiplied by the element node coordinates :math:`X_A` which yields a second order tensor (note that there are two free indices, one for :math:`X_A`, and one for :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`). Note that :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha} = \Big[\frac{\partial N^I}{\partial \xi}, \frac{\partial N^I}{\partial \eta}, \frac{\partial N^I}{\partial \zeta}\Big]^T`.
-
-Recognizing that the element mesh is a required input for finite element analysis, :math:`X_A` is already defined for the element. Similarly the shape functions are also an attribute of the elements, so the shape functions :math:`N^I(\theta)` are already defined. With these known values, we can explicitly defined :math:`J^\Box_{A\alpha}`.
-
-**Similar** to what was shown above, if we known the deformed configuration of an element, we can define the mapping between the gradient of point :math:`x_i` with respect to the isoparametric element's coordinate system (where :math:`x_i` is defined with respect to the deformed element's coordinate system). We will call this gradient :math:`j^\Box_{i\alpha}`.
+We can rearrange the above equation to solve for :math:`\frac{\partial N^I(X)}{\partial X_B}`.
 
 .. math::
     \begin{split}
-    j^\Box_{i\alpha} &= \frac{\partial x_i}{\partial \theta_\alpha} \\
-    &= \frac{\partial}{\partial \theta_\alpha}\big[\sum_{I=1}^{n_n} N^I(\theta)x^I_i\big] \\
-    &= \sum_{I=1}^{n_n}x^I_i \Big(\frac{\partial N^I(\theta)}{\partial \theta_\alpha}\Big)
+    \frac{\partial N^I(X)}{\partial X_B} &= (J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}
     \end{split}
 
+Recognize that we can already define the tensor :math:`J^\Box_{B\alpha}` (:eq:`fea:isoparametricMappingReferenceConfiguration`), so we can also determine its inverse :math:`(J^\Box)^{-1}_{\alpha B}`. Substituting the above equation into :eq:`fea:displacementGradientApproximation1`.
 
-.. _fig:feaIsoparametricElementDeformatino:
-.. figure:: /Mechanics/FiniteElement/FiniteElementFormulation/img/IsoparametricElementDeformation.png
-    :width: 400px
-    :align: center
-    :alt: alternate text
-    :figclass: align-center
-
-    An example of an eight node hexahedral
+.. math::
+    \frac{\partial \hat{u}_A}{\partial X_B} = \sum_{I=1}^{n_n} u^I_A (J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}
+    :label: fea:displacementGradientApproximation2
