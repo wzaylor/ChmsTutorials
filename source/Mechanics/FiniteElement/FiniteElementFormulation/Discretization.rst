@@ -207,3 +207,12 @@ Recognize that we can already define the tensor :math:`J^\Box_{B\alpha}` (:eq:`f
 .. math::
     \frac{\partial \hat{u}_A}{\partial X_B} = \sum_{I=1}^{n_n} u^I_A (J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}
     :label: fea:displacementGradientApproximation2
+
+Example Code
+''''''''''''
+This example code shows how the formulation above can be implemented. The purpose of the code is to clearly demonstrate the application of the formulation, and not code efficiency.
+
+
+.. literalinclude:: /Mechanics/FiniteElement/FiniteElementFormulation/Scripts/Discretization.py
+    :language: python
+    :emphasize-lines: 17-20, 22-26
