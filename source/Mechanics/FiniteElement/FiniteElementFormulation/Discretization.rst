@@ -210,9 +210,92 @@ Recognize that we can already define the tensor :math:`J^\Box_{B\alpha}` (:eq:`f
 
 Example Code
 ''''''''''''
-This example code shows how the formulation above can be implemented. The purpose of the code is to clearly demonstrate the application of the formulation, and not code efficiency.
+This example code shows how the formulation above can be implemented, and each part of that implementation is shown separately with an explanation of how the code relates to the equations above. The purpose of the code is to clearly demonstrate the application of the formulation, and not code efficiency. You can find the :ref:`complete script<FiniteElementFormulationDiscretizationExample>` at the end of this section.
 
+    In this example we are given:
+        * Nodal coordinates (``elementNodes`` in the example code) of an element defined in the reference configuration (:math:`X_A`). This is done to remain consistent with the equations defined earlier in this section, however the code is the same if the nodal coordinates are defined with respect to the deformed configuration (:math:`x_i`).  We are also given a set
+        * Nodal displacements (``nodeDisplacements`` in the example code) of the element's nodes.
+        * The coordinates of a point defined with respect to the isoparametric element's coordinate system (``isoparametricCoordinate`` in the example code, and :math:`P_\alpha` in :numref:`fig:feaIsoparametricElementJacobianMappingPointP`). This point should lie inside the isoparametric element. This point has one corresponding point that is defined inside the element defined by ``elementNodes``, and we will call this point :math:`P_A` (:numref:`fig:feaIsoparametricElementJacobianMappingPointP`).
+
+    We are looking to define:
+        * The displacement gradient (:math:`\frac{\partial \hat{u}_A}{\partial X_B}`) at point :math:`P` (``displacementGradient`` in the example code). This is the value defined by :eq:`fea:displacementGradientApproximation2`.
+
+    This example assumes:
+        * The shape functions defined in :eq:`fea:shapeFunctions` are used in this formulation. These functions (specifically, their partial derivatives) are hard-coded into this example.
+
+.. _fig:feaIsoparametricElementJacobianMappingPointP:
+.. figure:: /Mechanics/FiniteElement/FiniteElementFormulation/img/IsoparametricElementJacobianPointP.png
+    :width: 250px
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    The gradient of the mapping (:math:`J^\Box_{A\alpha}`) of a point :math:`P_\alpha` from the isoparametric element coordinate system to the corresponding point in the element's coordinate system (:math:`P_A`).
+
+**We will start** by defining the partial derivatives of the shape functions (:math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`). Notice how this value is expressed in both :eq:`fea:displacementGradientApproximation2` and :eq:`fea:isoparametricMappingReferenceConfiguration`. Given that this is used in two places, a function was used to determine these values.
+
+Recognize that each shape function (:math:`N^I(\theta)`) is a scalar function (i.e. given coordinates :math:`\theta_\alpha = [\xi, \eta, \zeta]^T` the function :math:`N^1(\theta)` yields a scalar). Therefore, the gradient of the shape functions is a first order tensor (i.e. three components, like a vector). In this example code, those components are split into three different variables [``dNI_dtheta0``, ``dNI_dtheta1``, ``dNI_dtheta2``]. Those variables for each shape function are then organized in an array:
+
+    ``dNI_dtheta0`` = [:math:`\frac{\partial N^1}{\partial \theta_0}, \frac{\partial N^2}{\partial \theta_0}, \ldots, \frac{\partial N^8}{\partial \theta_0}`]
+
+    ``dNI_dtheta1`` = [:math:`\frac{\partial N^1}{\partial \theta_1}, \frac{\partial N^2}{\partial \theta_1}, \ldots, \frac{\partial N^8}{\partial \theta_1}`]
+
+    ``dNI_dtheta2`` = [:math:`\frac{\partial N^1}{\partial \theta_2}, \frac{\partial N^2}{\partial \theta_2}, \ldots, \frac{\partial N^8}{\partial \theta_2}`]
+
+Using :eq:`fea:shapeFunctions`, we can solve for the values in ``dNI_dtheta0``.
+
+.. math::
+    \begin{split}
+    \frac{\partial N^1}{\partial \theta_0} &= \frac{\partial N^1}{\partial \xi} = -\frac18 (1 - \eta)(1 - \zeta) \\
+    \frac{\partial N^2}{\partial \theta_0} &= \frac{\partial N^1}{\partial \xi} = \frac18 (1 - \eta)(1 - \zeta) \\
+    \ldots & \\
+    \frac{\partial N^8}{\partial \theta_0} &= \frac{\partial N^1}{\partial \xi} = -\frac18 (1 + \eta)(1 + \zeta) \\
+    \end{split}
+
+Similarly, we can solve for the values in ``dNI_dtheta1`` and ``dNI_dtheta2``. **Notice** how these equations need values for :math:`\xi`, :math:`\eta`, and :math:`\zeta` to be defined. This is why we need to input the *given/known* isoparametric coordinate into the function shown below. **Notice** how :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` is fully defined when we know the isoparametric coordinate, *which is a given value in this example!!!*
+
+.. code-block:: python
+
+    def getShapeFunctionDerivative(isoparaCoord):
+        dNI_dtheta0 = np.array([-1*(1 - isoparaCoord[1])*(1 - isoparaCoord[2]), 1*(1 - isoparaCoord[1])*(1 - isoparaCoord[2]), 1*(1 + isoparaCoord[1])*(1 - isoparaCoord[2]), -1*(1 + isoparaCoord[1])*(1 - isoparaCoord[2]),
+                            -1*(1 - isoparaCoord[1])*(1 + isoparaCoord[2]), 1*(1 - isoparaCoord[1])*(1 + isoparaCoord[2]), 1*(1 + isoparaCoord[1])*(1 + isoparaCoord[2]), -1*(1 + isoparaCoord[1])*(1 + isoparaCoord[2])])*0.125
+
+        dNI_dtheta1 = np.array([-1*(1 - isoparaCoord[0])*(1 - isoparaCoord[2]), -1*(1 + isoparaCoord[0])*(1 - isoparaCoord[2]), 1*(1 + isoparaCoord[0])*(1 - isoparaCoord[2]), 1*(1 - isoparaCoord[0])*(1 - isoparaCoord[2]),
+                            -1*(1 - isoparaCoord[0])*(1 + isoparaCoord[2]), -1*(1 + isoparaCoord[0])*(1 + isoparaCoord[2]), 1*(1 + isoparaCoord[0])*(1 + isoparaCoord[2]), 1*(1 - isoparaCoord[0])*(1 + isoparaCoord[2])])*0.125
+
+        dNI_dtheta2 = np.array([-1*(1 - isoparaCoord[0])*(1 - isoparaCoord[1]), -1*(1 + isoparaCoord[0])*(1 - isoparaCoord[1]), -1*(1 + isoparaCoord[0])*(1 + isoparaCoord[1]), -1*(1 - isoparaCoord[0])*(1 + isoparaCoord[1]),
+                            1*(1 - isoparaCoord[0])*(1 - isoparaCoord[1]), 1*(1 + isoparaCoord[0])*(1 - isoparaCoord[1]), 1*(1 + isoparaCoord[0])*(1 + isoparaCoord[1]), 1*(1 - isoparaCoord[0])*(1 + isoparaCoord[1])])*0.125
+
+        return dNI_dtheta0, dNI_dtheta1, dNI_dtheta2
+
+**Next**, now that we have defined :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, we can define :math:`J^\Box_{A\alpha}` using :eq:`fea:isoparametricMappingReferenceConfiguration`. The purpose of the ``getIsoparametricJacobian`` function is to calculate :math:`J^\Box_{A\alpha}`, and express its components in a 3x3 array. Notice how :eq:`fea:isoparametricMappingReferenceConfiguration` sums over :math:`X^I_A\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, which is a second order tensor (as indicated by the two free indices, :math:`A` and :math:`\alpha`). The function below iterates over :math:`I`, and uses the expanded index notation to calculate :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`.
+
+Notice that the element's nodal coordinates (``elementNodes``) and the coordinates of the isoparametric point (``isoparaCoord``) are input into this function. These two variables are *known/given*.
+
+.. code-block:: python
+
+    def getIsoparametricJacobian(elementNodes, isoparaCoord):
+        dNI_dtheta0, dNI_dtheta1, dNI_dtheta2 = getShapeFunctionDerivative(isoparaCoord)
+
+        jacobian = np.zeros((3, 3)) # Initialize the desired Jacobian before we start the summation.
+        for i in range(8): # Iterate over the eight points and shape functions
+            jacobian_i = np.zeros((3, 3))  # Initialize an array for the ith iteration.
+            jacobian_i[0,0] = dNI_dtheta0[i]*elementNodes[i,0]
+            jacobian_i[0,1] = dNI_dtheta1[i]*elementNodes[i,0]
+            jacobian_i[0,2] = dNI_dtheta2[i]*elementNodes[i,0]
+
+            jacobian_i[1,0] = dNI_dtheta0[i]*elementNodes[i,1]
+            jacobian_i[1,1] = dNI_dtheta1[i]*elementNodes[i,1]
+            jacobian_i[1,2] = dNI_dtheta2[i]*elementNodes[i,1]
+
+            jacobian_i[2,0] = dNI_dtheta0[i]*elementNodes[i,2]
+            jacobian_i[2,1] = dNI_dtheta1[i]*elementNodes[i,2]
+            jacobian_i[2,2] = dNI_dtheta2[i]*elementNodes[i,2]
+
+            jacobian = jacobian + jacobian_i
+        return jacobian
+
+.. _FiniteElementFormulationDiscretizationExample:
 
 .. literalinclude:: /Mechanics/FiniteElement/FiniteElementFormulation/Scripts/Discretization.py
     :language: python
-    :emphasize-lines: 17-20, 22-26

@@ -12,19 +12,19 @@ def example():
                                   [0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])
 
     # A point in the isoparametric coordinate system. Note that this should be inside the isoparametric element.
-    isoparametricCoordinate = np.array([-1, -1, -1])
+    isoparametricCoordinate = np.array([0.95, 0.84, -0.62])
 
-    deformationGradient = getDeformationGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
+    displacementGradient = getDeformationGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
 
     return
 
 def getDeformationGradient(elementNodes, elementNodeDisp, isoparaCoord):
     """
-    Calculate the deformation gradient with respect to the same coordinate system that ``elementNodes`` is defined in.
+    Calculate the displacement gradient with respect to the same coordinate system that ``elementNodes`` is defined in.
     This gradient is taken at the point P.
     The given isoparametric point (``isoparaCoord``) maps to point P.
 
-    The point p referenced above is defined with respect to the same coordinate system that ``elementNodes`` is defined in.
+    The point P referenced above is defined with respect to the same coordinate system that ``elementNodes`` is defined in.
     This is usally the reference body's coordinate system, or the deformed body's coordinate system.
 
     ..NOTE:: This function assumes that an eight noded hexahedral element is being used with known basis functions.
@@ -37,15 +37,15 @@ def getDeformationGradient(elementNodes, elementNodeDisp, isoparaCoord):
     # Get the gradient of the 8 shape functions.
     dNI_dXA = getShapeFunctionGradient(elementNodes, isoparaCoord)
 
-    deformationGradient = np.zeros((3,3))
+    displacementGradient = np.zeros((3,3))
     for i in range(8): # Iterate over the 8 shape functions
         u_i = np.array([[elementNodeDisp[i,0]], [elementNodeDisp[i,1]], [elementNodeDisp[i,2]]]) # Rearrange the displacement of node_i into a 3x1 array.
         dNI_dXA_i = np.reshape(dNI_dXA[i], (1,3)) # Get the gradient of the ith shape function and rearranged it into a 3x1 array.
 
-        deformationGradient_i = u_i@dNI_dXA_i # du_dx = [[u_1*dNI_dX1, u_1*dNI_dX2, u_1*dNI_dX3],[u_2*dNI_dX1, u_2*dNI_dX2, u_2*dNI_dX3],[u_3*dNI_dX1, u_3*dNI_dX2, u_3*dNI_dX3]]
-        deformationGradient = deformationGradient + deformationGradient_i
+        displacementGradient_i = u_i@dNI_dXA_i # du_dx = [[u_1*dNI_dX1, u_1*dNI_dX2, u_1*dNI_dX3],[u_2*dNI_dX1, u_2*dNI_dX2, u_2*dNI_dX3],[u_3*dNI_dX1, u_3*dNI_dX2, u_3*dNI_dX3]]
+        displacementGradient = displacementGradient + displacementGradient_i
 
-    return deformationGradient
+    return displacementGradient
 
 def getShapeFunctionGradient(elementNodes, isoparaCoord):
     """
