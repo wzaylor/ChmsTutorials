@@ -268,7 +268,17 @@ Similarly, we can solve for the values in ``dNI_dtheta1`` and ``dNI_dtheta2``. *
 
         return dNI_dtheta0, dNI_dtheta1, dNI_dtheta2
 
-**Next**, now that we have defined :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, we can define :math:`J^\Box_{A\alpha}` using :eq:`fea:isoparametricMappingReferenceConfiguration`. The purpose of the ``getIsoparametricJacobian`` function is to calculate :math:`J^\Box_{A\alpha}`, and express its components in a 3x3 array. Notice how :eq:`fea:isoparametricMappingReferenceConfiguration` sums over :math:`X^I_A\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, which is a second order tensor (as indicated by the two free indices, :math:`A` and :math:`\alpha`). The function below iterates over :math:`I`, and uses the expanded index notation to calculate :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`.
+**Next**, now that we have defined :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, we can define :math:`J^\Box_{A\alpha}` using :eq:`fea:isoparametricMappingReferenceConfiguration`. The purpose of the ``getIsoparametricJacobian`` function is to calculate :math:`J^\Box_{A\alpha}`, and express its components in a 3x3 array. Notice how :eq:`fea:isoparametricMappingReferenceConfiguration` sums over :math:`X^I_A\frac{\partial N^I(\theta)}{\partial \theta_\alpha}`, which is a second order tensor (as indicated by the two free indices, :math:`A` and :math:`\alpha`). The function below iterates over :math:`I`, and manually calculates :math:`\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` (as shown below).
+
+.. math::
+    J^\Box_{A\alpha} = \sum_{I=1}^{n_n}\begin{bmatrix} \frac{\partial N^I}{\partial \theta_0}X^I_0 & \frac{\partial N^I}{\partial \theta_1}X^I_0 & \frac{\partial N^I}{\partial \theta_2}X^I_0 \\
+    \frac{\partial N^I}{\partial \theta_0}X^I_1 & \frac{\partial N^I}{\partial \theta_1}X^I_1 & \frac{\partial N^I}{\partial \theta_2}X^I_1 \\
+    \frac{\partial N^I}{\partial \theta_0}X^I_2 & \frac{\partial N^I}{\partial \theta_1}X^I_2 & \frac{\partial N^I}{\partial \theta_2}X^I_2 \end{bmatrix}
+
+Note that the same result can be achieved by using matrix multiplication (this form is not demonstrated in the code block below).
+
+.. math::
+    J^\Box_{A\alpha} = \sum_{I=1}^{n_n} \begin{bmatrix}X^I_0 \\ X^I_1 \\ X^I_2 \end{bmatrix} \begin{bmatrix}\frac{\partial N^I}{\partial \theta_0} & \frac{\partial N^I}{\partial \theta_1} & \frac{\partial N^I}{\partial \theta_2} \end{bmatrix}
 
 Notice that the element's nodal coordinates (``elementNodes``) and the coordinates of the isoparametric point (``isoparaCoord``) are input into this function. These two variables are *known/given*.
 
@@ -294,6 +304,63 @@ Notice that the element's nodal coordinates (``elementNodes``) and the coordinat
 
             jacobian = jacobian + jacobian_i
         return jacobian
+
+**The last step** in this example substitutes the values calcualted in the previous two steps into :eq:`fea:displacementGradientApproximation2`. This is performed with the function called ``getDisplacementGradient``. Observant readers will notice that the first part of this function calls another function called ``getShapeFunctionGradient``.
+
+The function ``getShapeFunctionGradient`` calculates the term :math:`(J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` from :eq:`fea:displacementGradientApproximation2`. Notice that :eq:`fea:displacementGradientApproximation2` sums over the number of element nodes (:math:`n_n`), therefore if :math:`n_n=8`, then ``getShapeFunctionGradient`` must return eight terms. Notice that the term :math:`(J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` has one free index (:math:`B`), therefore each of the terms that ``getShapeFunctionGradient`` returns is a first order tensor (represented as a 1x3 array). The code block below shows ``getShapeFunctionGradient``.
+
+**Note** that the ``@`` symbol is used to use matrix multiplication with numpy arrays.
+
+.. code-block:: python
+
+    def getShapeFunctionGradient(elementNodes, isoparaCoord):
+        dNI_dtheta0, dNI_dtheta1, dNI_dtheta2 = getShapeFunctionDerivative(isoparaCoord)
+
+        # Calculate the Jacobian of the mapping from the given isoparametric coordinate (``isoparaCoord``) to the element's coordinate system.
+        jacobian = getIsoparametricJacobian(elementNodes, isoparaCoord)
+        # Calculate the inverse of the Jacobian that was just calculated
+        inverseJacobian = np.linalg.inv(jacobian)
+
+        # Pg 63 and 64 in Kim, Introduction to Nonlinear Finite Element Analysis
+        dNI_dXA = np.zeros((8, 3)) # Initialize the gradient of the 8 shape functions
+        for I in range(8):  # Iterate over the 8 shape functions
+            dNjdr = np.array([dNI_dtheta0[I], dNI_dtheta1[I], dNI_dtheta2[I]]).reshape((1, 3))  # The partial derivative of the Ith shape function wrt. the isoparametric coordinates.
+            dNI_dXA[I] = dNjdr@inverseJacobian
+        return dNI_dXA
+
+The function ``getDisplacementGradient`` calculates the value that is represented in :eq:`fea:displacementGradientApproximation1` (and similarly :eq:`fea:displacementGradientApproximation2`). As shown in the code block below, ``dNI_dXA`` is a 8x3 array, where each row corresponds to :math:`I` in the equation :math:`\frac{\partial N^I}{\partial X_A}` in :eq:`fea:displacementGradientApproximation1` (or :math:`(J^\Box)^{-1}_{\alpha B}\frac{\partial N^I(\theta)}{\partial \theta_\alpha}` in :eq:`fea:displacementGradientApproximation2`).
+
+Notice that the value that we are calculating (:math:`\frac{\partial \hat{u}_A}{\partial X_B}`) has two free indidices (:math:`A,B`), so it is a second order tensor. In matrix form, :eq:`fea:displacementGradientApproximation1` can be expressed as
+
+.. math::
+    \frac{\partial \hat{u}_A}{\partial X_B} = \sum_{I=1}^{n_n}\begin{bmatrix} u^I_0 \frac{\partial N^I}{\partial X_0} &  u^I_0 \frac{\partial N^I}{\partial X_1} & u^I_0 \frac{\partial N^I}{\partial X_2} \\
+    u^I_1 \frac{\partial N^I}{\partial X_0} & u^I_1 \frac{\partial N^I}{\partial X_1} & u^I_1 \frac{\partial N^I}{\partial X_2} \\
+    u^I_2 \frac{\partial N^I}{\partial X_0} & u^I_2 \frac{\partial N^I}{\partial X_1} & u^I_2 \frac{\partial N^I}{\partial X_2}\end{bmatrix}
+
+The ``getDisplacementGradient`` uses matrix multiplication to define :math:`u^I_A \frac{\partial N^I(X)}{\partial X_B}` instead of manually populating the different components of the second order tensor. To match the code block below, :eq:`fea:displacementGradientApproximation1` can be expressed as
+
+.. math::
+    \frac{\partial \hat{u}_A}{\partial X_B} = \sum_{I=1}^{n_n} \begin{bmatrix} u^I_0 \\ u^I_1 \\ u^I_2 \end{bmatrix} \begin{bmatrix} \frac{\partial N^I}{\partial X_0} & \frac{\partial N^I}{\partial X_1} & \frac{\partial N^I}{\partial X_2} \end{bmatrix}
+
+**Note** that the ``@`` symbol is used to use matrix multiplication with numpy arrays.
+
+.. code-block:: python
+
+    def getDisplacementGradient(elementNodes, elementNodeDisp, isoparaCoord):
+        # Get the gradient of the 8 shape functions.
+        dNI_dXA = getShapeFunctionGradient(elementNodes, isoparaCoord)
+
+        displacementGradient = np.zeros((3,3))
+        for i in range(8): # Iterate over the 8 shape functions
+            u_i = np.array([[elementNodeDisp[i,0]], [elementNodeDisp[i,1]], [elementNodeDisp[i,2]]]) # Rearrange the displacement of node_i into a 3x1 array.
+            dNI_dXA_i = np.reshape(dNI_dXA[i], (1,3)) # Get the gradient of the ith shape function and rearranged it into a 3x1 array.
+
+            displacementGradient_i = u_i@dNI_dXA_i # du_dx = [[u_1*dNI_dX1, u_1*dNI_dX2, u_1*dNI_dX3],[u_2*dNI_dX1, u_2*dNI_dX2, u_2*dNI_dX3],[u_3*dNI_dX1, u_3*dNI_dX2, u_3*dNI_dX3]]
+            displacementGradient = displacementGradient + displacementGradient_i
+
+        return displacementGradient
+
+Below is the heavily commented example code with all of the functions described above.
 
 .. _FiniteElementFormulationDiscretizationExample:
 

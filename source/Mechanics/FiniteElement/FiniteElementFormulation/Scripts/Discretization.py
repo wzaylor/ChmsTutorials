@@ -12,13 +12,21 @@ def example():
                                   [0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])
 
     # A point in the isoparametric coordinate system. Note that this should be inside the isoparametric element.
-    isoparametricCoordinate = np.array([0.95, 0.84, -0.62])
+    isoparametricCoordinate = np.array([0.95, 0.84, -0.62]) # An arbitrary point inside the isoparametric element.
+    displacementGradient = getDisplacementGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
+    print(f'displacement gradient at {isoparametricCoordinate}:\n{displacementGradient}')
 
-    displacementGradient = getDeformationGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
+    isoparametricCoordinate = np.array([-1., -1., -1.]) # The node that corresponds to element node_0 (i.e. the node that the only displacement is applied to)
+    displacementGradient = getDisplacementGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
+    print(f'displacement gradient at {isoparametricCoordinate}:\n{displacementGradient}')
+
+    isoparametricCoordinate = np.array([1., 1., -1.]) # The node that corresponds to element node_2 (i.e. a node where no displacement is applied to, and does not share an edge with element node_0)
+    displacementGradient = getDisplacementGradient(elementNodes, nodeDisplacements, isoparametricCoordinate)
+    print(f'displacement gradient at {isoparametricCoordinate}:\n{displacementGradient}')
 
     return
 
-def getDeformationGradient(elementNodes, elementNodeDisp, isoparaCoord):
+def getDisplacementGradient(elementNodes, elementNodeDisp, isoparaCoord):
     """
     Calculate the displacement gradient with respect to the same coordinate system that ``elementNodes`` is defined in.
     This gradient is taken at the point P.
