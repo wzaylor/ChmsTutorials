@@ -80,7 +80,7 @@
 <p>We will look at a simple spring damper problem, which is shown in the figure below.</p>
 <div class="align-center figure" id="id1">
 <a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamper.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamper.png" style="width: 300px;" /></a>
-<p class="caption"><span class="caption-text">Mass-spring-damper system</span></p>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Mass-spring-damper system</span></p>
 </div>
 <p>The equation of motion of this system is as follows:</p>
 <div class="math notranslate nohighlight">
@@ -150,7 +150,7 @@
 </div>
 <div class="align-center figure" id="id2">
 <a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot1.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot1.png" style="width: 300px;" /></a>
-<p class="caption"><span class="caption-text">Analytical and numerical solution for the mass’ position vs. time.</span></p>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Analytical and numerical solution for the mass’ position vs. time.</span></p>
 </div>
 <p><strong>Why are these different?</strong></p>
 <p>Zoom in to the beginning of the plot to see the difference at the second point in the numerical solution.</p>
@@ -159,7 +159,7 @@
 <p><strong>Solution 2</strong>: estimate more accurate increment of <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <div class="align-center figure" id="id3">
 <a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot2.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot2.png" style="width: 200px;" /></a>
-<p class="caption"><span class="caption-text">The first few points of the analytical and numerical solutions showing the difference in solutions.</span></p>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">The first few points of the analytical and numerical solutions showing the difference in solutions.</span></p>
 </div>
 <p>Instead of using the derivative of time <span class="math notranslate nohighlight">\(t\)</span> to calculate the increments of <span class="math notranslate nohighlight">\(t + \Delta t\)</span> comparing to time <span class="math notranslate nohighlight">\(t\)</span>. Value of <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> is calculated first and then use the derivative of time <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> to calculate the increments of <span class="math notranslate nohighlight">\(t + \Delta t\)</span> comparing to time <span class="math notranslate nohighlight">\(t\)</span>.</p>
 <p>Therefore, in the for loop, the value of <span class="math notranslate nohighlight">\(t + \Delta t/2\)</span> needs to be calculated first.</p>
@@ -191,7 +191,7 @@
 </div>
 <div class="align-center figure" id="id4">
 <a class="reference internal image-reference" href="../../../_images/DifferentialEquationSolveMassSpringDamperPlot3.png"><img alt="alternate text" src="../../../_images/DifferentialEquationSolveMassSpringDamperPlot3.png" style="width: 200px;" /></a>
-<p class="caption"><span class="caption-text">The analytical and the numberical solution of mass position vs time. Note that this plot was generated using the middle point ODE solver in the numerical solution.</span></p>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">The analytical and the numberical solution of mass position vs time. Note that this plot was generated using the middle point ODE solver in the numerical solution.</span></p>
 </div>
 <p>More higher order ode solving method can be seen here:</p>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods</a></p>
