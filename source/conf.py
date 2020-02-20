@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'CHMS Tutorials'
-copyright = '2019, Center for Human-Machine Systems'
+copyright = '2020, Center for Human-Machine Systems'
 author = 'Center for Human-Machine Systems'
 
 # The short X.Y version
