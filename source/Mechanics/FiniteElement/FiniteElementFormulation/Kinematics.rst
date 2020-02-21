@@ -61,7 +61,7 @@ Notice that this is a scalar value, which is invariant, meaning that it is the s
 
 Lagrangian Strain
 '''''''''''''''''
-Earlier we defined strain as the difference in distance between two points at time :math:`t` and time :math:`t=t_0=0` (:eq:`fea:kinematicsStrainDistance1`). If we relate our coordinates to the reference configuration (the configuration at :math:`t=t_0=0`), then the coordinates of the points at time :math:`t` are functions of the coordinates of the reference configuration.
+Earlier we defined strain as the difference in distance between two points at time :math:`t` and time :math:`t=t_0=0` (:eq:`fea:kinematicsStrainDistance1`). If we relate our coordinates to the reference configuration (the configuration at :math:`t=t_0=0`), then the coordinates of the points (:math:`Q^1`, :math:`Q^2` :numref:`FiniteElementFormulationKinematicsDistance`) at time :math:`t\geq 0` are functions of the coordinates of the reference configuration.
 
 .. math::
     x_i = x_i(X_A, t)
@@ -74,7 +74,7 @@ Now, **we will make two assumptions**
 
 As a result of these assumptions :math:`Q^1` and :math:`Q^2` are also infinitesimally separated. Note that the distance between points :math:`P^M` and :math:`Q^m` are not necessarily infinitesimal.
 
-Lets consider one point :math:`x^2_i=x_i(X^2_A,t)`, and use a Taylor series expansion about the position of the point :math:`x^1_i(X^1_A,t)` (recall that as a result of the previously mentioned assumptions, the points :math:`Q^1 =x^1_i(X^1_A,t)` and :math:`Q^2 =x^2_i(X^2_A,t)` are infinitesimally close).
+Consider one point :math:`x^2_i=x_i(X^2_A,t)`, and use a Taylor series expansion about the position of the point :math:`x^1_i(X^1_A,t)` (recall that as a result of the previously mentioned assumptions, the points :math:`Q^1 =x^1_i(X^1_A,t)` and :math:`Q^2 =x^2_i(X^2_A,t)` are infinitesimally close).
 
 .. math::
     \begin{split}
@@ -104,7 +104,7 @@ Substituting the above equation into :eq:`fea:kinematicsStrainDistance1`.
 .. math::
     \begin{split}
     \psi &= \delta_{ij}\Delta x_i \Delta x_j - \delta_{AB}\Delta X_A \Delta X_B \\
-    &= \delta_{ij}\Big(\frac{\partial x_i(X^1_A,t)}{\partial X_A}\Big) \Delta x_j - \delta_{AB}\Delta X_A \Delta X_B \\
+    &= \delta_{ij}\Big(\frac{\partial x_i(X^1_A,t)}{\partial X_A}\Delta X_A\Big) \Delta x_j - \delta_{AB}\Delta X_A \Delta X_B \\
     &= \delta_{ij}\Big(\frac{\partial x_i(X^1_A,t)}{\partial X_A}\Delta X_A\Big) \Big(\frac{\partial x_j(X^1_B,t)}{\partial X_B}\Delta X_B\Big) - \delta_{AB}\Delta X_A \Delta X_B \\
     &= \Big[\delta_{ij}\Big(\frac{\partial x_i(X^1_A,t)}{\partial X_A}\Big) \Big(\frac{\partial x_j(X^1_B,t)}{\partial X_B}\Big) - \delta_{AB}\Big]\Delta X_A \Delta X_B \\
     \end{split}
@@ -122,8 +122,76 @@ Substutituing :eq:`fea:kinematicsLagrangeStrain` into :eq:`fea:kinematicsStrainL
 .. math::
     \psi = 2E_{AB}\Delta X_A \Delta X_B
 
+**Notice** that all of the terms in :eq:`fea:kinematicsLagrangeStrain` and :eq:`fea:kinematicsStrainLagrangian` are defined with respect to coordinates in the reference coordinate system (:math:`X_A`).
+
 .. _FiniteElementFormulationKinematicsEularianStrain:
 
 Eularian Strain
 '''''''''''''''
-Earlier we defined strain as the difference in distance between two points at time :math:`t` and time :math:`t=0` (:eq:`fea:kinematicsStrainDistance1`). If we defined our coordinate system at time :math:`t`,
+Earlier we defined strain as the difference in distance between two points at time :math:`t` and time :math:`t=t_0=0` (:eq:`fea:kinematicsStrainDistance1`). If we relate our coordinates to the deformed configuration (the configuration at :math:`t>0`), then the coordinates of the points (:math:`P^1`, :math:`P^2` :numref:`FiniteElementFormulationKinematicsDistance`) at time :math:`t=0` are functions of the coordinates of the deformed configuration.
+
+.. math::
+    X_A = X_A(x_i, t)
+
+We can input the coordinates of points :math:`Q^1` and :math:`Q^2` into the above equation to define the coordinates of those points at different times (i.e. at different deformations). For example we can use :math:`x_i=Q^1_i` at :math:`t>0`, then :math:`X_A(Q^1_i, t) = X^1_A` (and similarly for :math:`Q^2`). If we do the same at :math:`t=0`, then :math:`X_A(Q^1_i, t=0) = P^1_A`.
+
+Now, **we will make two assumptions**
+    #) The points :math:`Q^1` and :math:`Q^2` are infinitesimally separated
+    #) Assume continuity in the body as it deforms
+
+As a result of these assumptions :math:`P^1` and :math:`P^2` are also infinitesimally separated. Note that the distance between points :math:`P^M` and :math:`Q^m` are not necessarily infinitesimal.
+
+Consider one point :math:`X^2_A=X_A(x^2_i,t)`, and use a Taylor series expansion about the position of the point :math:`X^1_A(x^1_i,t)` (recall that as a result of the previously mentioned assumptions, the points :math:`P^1 =X^1_A(x^1_i,t_0)` and :math:`P^2 =X^2_A(x^2_i,t_0)` are infinitesimally close).
+
+.. math::
+    \begin{split}
+    X^2_A &= X_A(x^1_i,t) + \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)dx_i + \ldots \\
+    &= X_A(x^1_i,t) + \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)(x^2_i - x^1_i) + \ldots \\
+    \end{split}
+
+Recall from a :ref:`previous section<FiniteElementFormulationKinematicsDistanceBetweenPoints>` that :math:`\Delta X_A = X^2_A - X^1_A`. Substituting the above equation in the the expression for :math:`\Delta X_A`. Also neglecting the higher order terms because :math:`Q^1` and :math:`Q^2` are infinitesimally close, and noting that :math:`X^1_A=X_A(x^1_i,t)`.
+
+.. math::
+    \begin{split}
+    \Delta X_A &= X^2_A - X^1_A \\
+    &= X_A(x^1_i,t) + \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)(x^2_i - x^1_i) - X^1_A \\
+    &= \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)(x^2_i - x^1_i)
+    \end{split}
+
+Noting that :math:`\Delta x_i = x^2_i - x^1_i`, the above equation can be rewritten.
+
+.. math::
+    \begin{split}
+    \Delta X_A &= \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)(x^2_i - x^1_i) \\
+    &= \Big(\frac{\partial X_A(x_i,t)}{\partial x_i}|_{x_i=x^1_i}\Big)\Delta x_i
+    \end{split}
+
+Substituting the above equation into :eq:`fea:kinematicsStrainDistance1`.
+
+.. math::
+    \begin{split}
+    \psi &= \delta_{ij}\Delta x_i \Delta x_j - \delta_{AB}\Delta X_A \Delta X_B \\
+    &= \delta_{ij}\Delta x_i \Delta x_j - \delta_{AB}\Big(\frac{\partial X_A(x^1_i,t)}{\partial x_i}\Delta x_i\Big) \Delta X_B \\
+    &= \delta_{ij}\Delta x_i \Delta x_j - \delta_{AB}\Big(\frac{\partial X_A(x^1_i,t)}{\partial x_i}\Delta x_i\Big) \Big(\frac{\partial X_B(x^1_j,t)}{\partial x_j}\Delta x_j\Big)\\
+    &= \Big[\delta_{ij} - \delta_{AB}\Big(\frac{\partial X_A(x^1_i,t)}{\partial x_i}\Big) \Big(\frac{\partial X_B(x^1_j,t)}{\partial x_j}\Big) \Big]\Delta x_i \Delta x_j
+    \end{split}
+    :label: fea:kinematicsStrainEularian
+
+The term inside the brackets in :eq:`fea:kinematicsStrainEularian` is *similar* to the Eularian strain tensor (:math:`e_{ij}`). We multiply the expression by :math:`\frac 12` to define Eularian strain. *Note that if strain happens to be infinitesimally small, then the definition of Eularian strain is the same as engineering strain. The two definitions diverge as strain increases.*
+
+.. math::
+    \boxed{
+    e_{ij} = \frac{1}{2}\Big[\delta_{ij} - \delta_{AB}\Big(\frac{\partial X_A(x^1_i,t)}{\partial x_i}\Big) \Big(\frac{\partial X_B(x^1_j,t)}{\partial x_j}\Big)\Big]}
+    :label: fea:kinematicsEularianeStrain
+
+Substutituing :eq:`fea:kinematicsEularianeStrain` into :eq:`fea:kinematicsStrainEularian`.
+
+.. math::
+    \psi = 2e_{ij}\Delta x_i \Delta x_j
+
+**Notice** that all of the terms in :eq:`fea:kinematicsEularianeStrain` and :eq:`fea:kinematicsStrainEularian` are defined with respect to coordinates in the deformed coordinate system (:math:`x_i`).
+
+.. _FiniteElementFormulationKinematicsDeformationGradient:
+
+Deformation Gradient
+''''''''''''''''''''
