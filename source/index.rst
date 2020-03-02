@@ -8,6 +8,7 @@ Welcome to CHMS Tutorials
 Recently Added Tutorials
 """"""""""""""""""""""""
     * 3D visualization using Python :ref:`Python3DVisualization`
+    * Automated Latex table generation :ref:`DocumentationLatexTable`
 
 .. toctree::
     :maxdepth: 1
