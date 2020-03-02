@@ -6,7 +6,7 @@ Purpose
 '''''''
 The purpose of this tutorial is to demonstrate how to automate the generation of a table in Latex. This is useful because it **avoids copy-and-paste errors**.
 
-This tutorial describes the overall workflow, then have several examples with increasing complexity. This tutorial assumes that you have data arranged in some sort of an array in a Python of Matlab script.
+This tutorial describes the overall workflow, then shows examples with increasing complexity. This tutorial assumes that you have data arranged in some sort of an array in a Python of Matlab script.
 
 Workflow
 ''''''''
