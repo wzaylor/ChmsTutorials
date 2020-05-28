@@ -26,6 +26,8 @@ Notice how ``r`` is placed before the definition of the string. This prefix make
 .. image:: /Python/3DVisualization/img/LoadStlSurface.png
    :width: 300px
 
+The highlighted lines below show the filename variable definition, and operations that are used to load the .stl file.
+
 .. literalinclude:: /Python/3DVisualization/Scripts/LoadStlSurface.py
     :language: python
     :emphasize-lines: 17-18, 20-27
