@@ -1,8 +1,8 @@
 .. _Python3DVisualizationCoordinateAxes:
 
-==============
-CoordinateAxes
-==============
+===============
+Coordinate Axes
+===============
 Purpose
 '''''''
 This tutorial demonstrates a common routine that is used when creating visualizations: 
