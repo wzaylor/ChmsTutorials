@@ -2,7 +2,12 @@
 chms/Documentation
 chms/genindex
 chms/_images
+
 chms/Python
+chms/Controls
+chms/Matlab
+chms/Mechanics
+
 chms/search
 chms/_sources
 chms/_static
