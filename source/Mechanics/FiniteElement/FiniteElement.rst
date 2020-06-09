@@ -10,4 +10,5 @@ The section is under development...
     :maxdepth: 2
     :caption: Contents:
 
+    /Mechanics/FiniteElement/FeBio/FeBio.rst
     /Mechanics/FiniteElement/FiniteElementFormulation/FiniteElementFormulation.rst
