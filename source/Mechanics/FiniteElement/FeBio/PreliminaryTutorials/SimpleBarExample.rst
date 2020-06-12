@@ -28,7 +28,7 @@ Material
 --------
 Every deformable element in the finite element model needs to have material properties assigned. The assigned materials are important to defining the system that is being modeled. For this example, we will use a Neo-Hookean material. We will specify a Young's modulus of 500 and a Poisson's ratio of 0.3
 
-.. code-block:: none
+.. code-block:: xml
 
     <Material>
         <material id="1" name="SomeName" type="neo-Hookean">
@@ -49,7 +49,7 @@ Nodes specify the *x,y,z* coordinates of points that compose the finite element 
 This example uses two elements with 12 nodes, and those nodes are shown below.
 In FEBio, the nodes need to have the following format (note that the *x,y,z* coordinates are not labeled. It is assumed that the coordinates follow the order of *x,y,z*):
 
-.. code-block:: none
+.. code-block:: xml
 
     <Nodes>
         <node id="1">0.0, 0.0, 0.0</node>
@@ -85,7 +85,7 @@ As a demonstration, draw a 3D coordinate axes with twelve points that have the c
 
 In FEBio, element definitions need to have the following format:
 
-.. code-block:: none
+.. code-block:: xml
 
     <Elements mat="1" type="hex8">
         <elem id="1">1, 2, 3, 4, 5, 6, 7, 8</elem>
@@ -100,7 +100,7 @@ A nodeset (and elementset) consists of two values. The first value is the set's 
 
 In this example, we want to apply boundary conditions to one end of the bar and loads to the other end. Referring to the :ref:`FeBioSimpleBarExampleNodes` section and the simple drawing of the geometry, we will select the nodes that have coordinates ``y=0`` as the fixed end (nodes 1, 2, 5, 6), and nodes that have coordinates ``y=2`` as the loaded end (nodes 9, 10, 11, 12). We will add these two sets after our ``Nodes`` definition, as shown below.
 
-.. code-block:: none
+.. code-block:: xml
 
     <Nodes>
         <node id="1">0.0, 0.0, 0.0</node>
@@ -135,7 +135,7 @@ Boundary conditions specify known displacements (and rotations) at specific node
 
 Boundary conditions are important to defining the system that is being modeled. There can be much more discussion about the use of boundary conditions, however that is beyond the scope of this example. For this example, we will model one end of the bar as being rigidly fixed, therefore the nodes at one end of the bar will be constrained to have zero displacement in the x, y, z directions.
 
-.. code-block:: none
+.. code-block:: xml
 
     <Boundary>
         <fix bc="x,y,z" node_set="fixed"/>
@@ -148,7 +148,7 @@ Similar to boundary conditions, loads are important to defining the system that 
 
 In this example, we are applying a 10 N load to each node at one of the bar. Notice how there are four nodes at the end of the bar, so we are simulating a 40 N load being applied.
 
-.. code-block:: none
+.. code-block:: xml
 
     <Loads>
         <nodal_load bc="y" node_set="loaded">
@@ -157,8 +157,8 @@ In this example, we are applying a 10 N load to each node at one of the bar. Not
     </Loads>
     <LoadData>
         <loadcurve id="1" type="smooth">
-            <point>0,0</point>
-            <point>1,10</point>
+            <point>0.,0.</point>
+            <point>1.,10.</point>
         </loadcurve>
     </LoadData>
 
@@ -168,14 +168,14 @@ Notice how the load has a ``scale`` of 1, and the load definition refers to a lo
 
 Running the Model
 -----------------
-We can assemble all of the above pieces into the model shown below. Copy and paste the text below into a file, and save that file to a specific directory (such as ``C:\Projects\BarExample\BarExample.feb``
+We can assemble all of the above pieces into the model shown below. Copy and paste the text below into a file, and save that file to a specific directory (such as ``C:\Projects\BarExample\BarExample.feb``). Note that the file should be saved with a ``.feb`` extension.
 
 We will execute this command from a ``command prompt`` on Windows (or a ``terminal`` on Linux). If you are using Windows, you will have to modify your computer's path (see section 2.1: `https://help.febio.org/FEBio/FEBio_um_2_9/index.html <https://help.febio.org/FEBio/FEBio_um_2_9/index.html>`_). The path you would add may be similar to this: ``C:\Program Files\FEBio2.9.1\bin``
 
 From the command prompt (or terminal) navigate to the directory where you saved the .feb file (for example, ``C:\Projects\BarExample``. Enter the command
 ``febio3 BarExample.feb``. This will run the simulation and the results should be saved to a file called ``BarExample.xplt``.
 
-.. code-block:: none
+.. code-block:: xml
 
     <?xml version="1.0" encoding="ISO-8859-1"?>
     <!-- This file was created with FEBio Studio version 1.0.0 -->
@@ -252,8 +252,8 @@ From the command prompt (or terminal) navigate to the directory where you saved 
         </Loads>
         <LoadData>
             <loadcurve id="1" type="smooth">
-                <point>0,0</point>
-                <point>1,10</point>
+                <point>0.,0.</point>
+                <point>1.,10.</point>
             </loadcurve>
         </LoadData>
     </febio_spec>
