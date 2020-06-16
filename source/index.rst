@@ -9,6 +9,7 @@ Recently Added Tutorials
 """"""""""""""""""""""""
     * 3D visualization using Python :ref:`Python3DVisualization`
     * Automated Latex table generation :ref:`DocumentationLatexTable`
+    * FEBio finite element tutorials :ref:`FiniteElementFeBioTutorials`
 
 .. toctree::
     :maxdepth: 1
