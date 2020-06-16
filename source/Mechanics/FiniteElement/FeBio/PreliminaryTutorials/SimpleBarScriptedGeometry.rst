@@ -636,8 +636,12 @@ First, we will just combine the two examples to produce one xml file. **Note** A
         # Manually define the data needed for the 'Elements' xml-element
         fooElementsData = {'mat': '1', 'type': 'hex8'}  # Define the XML-attributes that will be used for the 'Elements' XML-element
 
+        # Define an xml-element that is necessary for FEBio.
+        rootElement = ET.Element('febio_spec', {'version':'2.5'}) # Create the element that will contain the 'Geometry' xml-element.
         # Define an xml-element that will be used as the parent to the 'Nodes' and 'Elements' xml-elements.
         geometryElement = ET.Element('Geometry')
+        # Add 'geometryElement' as a child to 'rootElement'
+        rootElement.append(geometryElement)
 
         # Create the 'Nodes' xml-element
         fooNodes = ET.Element('Nodes') # Create an element with 'Nodes' as the tag.
@@ -655,13 +659,12 @@ First, we will just combine the two examples to produce one xml file. **Note** A
             elemXmlElement = getElemXmlElement(i + 1, elementsDef[i])
             fooElements.append(elemXmlElement)
 
-        # Add the xml-elements 'fooNodes' and 'fooElements' as children to the 'geometryElement' xml-element.
         geometryElement.append(fooNodes)
         geometryElement.append(fooElements)
 
         fizzBuzzFileName = 'TestFile.xml'  # Define the filename of the xml file that is being written.
 
-        xmlElementWriter(geometryElement, fizzBuzzFileName)
+        xmlElementWriter(rootElement, fizzBuzzFileName)
 
     if __name__ == '__main__':
         example()
