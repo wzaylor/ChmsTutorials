@@ -70,6 +70,8 @@ On a piece of paper, draw a 3D coordinate axes with twelve points that have the 
 
 .. NOTE:: Units are not explicitly defined in the finite element model. It is up to the user to manage units. We will take the node coordinates to have units of mm.
 
+.. _FeBioSimpleBarExampleElements:
+
 Elements
 --------
 Elements are also used to define the geometry used in the model. Apologies for the lack of a descriptive definition, the punch-line is a finite element model needs elements, and not just nodes.
@@ -166,6 +168,8 @@ Notice how the load has a ``scale`` of 1, and the load definition refers to a lo
 
 .. NOTE:: Units are not explicitly defined in the finite element model. It is up to the user to manage units. We will take the loads to have units of N.
 
+.. _SimpleBarExampleRunningModel:
+
 Running the Model
 -----------------
 We can assemble all of the above pieces into the model shown below. Copy and paste the text below into a file, and save that file to a specific directory (such as ``C:\Projects\BarExample\BarExample.feb``). Note that the file should be saved with a ``.feb`` extension.
@@ -178,7 +182,6 @@ From the command prompt (or terminal) navigate to the directory where you saved 
 .. code-block:: xml
 
     <?xml version="1.0" encoding="ISO-8859-1"?>
-    <!-- This file was created with FEBio Studio version 1.0.0 -->
     <febio_spec version="2.5">
         <Module type="solid"/>
         <Control>
