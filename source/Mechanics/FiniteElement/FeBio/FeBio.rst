@@ -16,3 +16,4 @@ The preliminary tutorials demonstrate concepts that are used in more specific ap
 
     /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/SimpleBarExample.rst
     /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/SimpleBarScriptedGeometry.rst
+    /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/FeBioBookKeeping.rst
