@@ -11,4 +11,5 @@ This page organizes the different Python tutorials.
     :caption: Contents:
 
     /Python/General/General.rst
+    /Python/General/PythonClass.rst
     /Python/3DVisualization/3DVisualization.rst
