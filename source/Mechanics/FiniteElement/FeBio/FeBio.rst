@@ -16,4 +16,13 @@ The preliminary tutorials demonstrate concepts that are used in more specific ap
 
     /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/SimpleBarExample.rst
     /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/SimpleBarScriptedGeometry.rst
-    /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/FeBioBookKeeping.rst
+    /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/FeBioModelAssembly.rst
+
+The model creation tutorials demonstrate specific aspects of creating a finite element knee model.
+
+.. toctree::
+    :maxdepth: 2
+    :numbered:
+    :caption: Model Creation Tutorials:
+
+    /Mechanics/FiniteElement/FeBio/ModelCreationTutorials/GeneratingSolidTetMesh.rst
