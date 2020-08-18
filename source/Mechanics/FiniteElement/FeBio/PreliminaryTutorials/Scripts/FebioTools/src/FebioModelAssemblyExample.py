@@ -31,18 +31,20 @@ def example():
     part1.setMaterialId(1)
     part1.addNodeSet(part1NodeSet, 'part1NodeSet')
 
+    # Create an instance of the model assembly object
     modelAssembly = FebioModelAssembly.ModelAssembly()
-    modelAssembly.addPart(part0)
-    modelAssembly.addPart(part1)
+    modelAssembly.addPart(part0) # Use the 'addPart' method with part0
+    modelAssembly.addPart(part1) # Use the 'addPart' method with part0
 
+    # Create the xml-element that is used to define the geometry for part0 and part1 in the .feb file
     geometryXmlElement = FebioFileWriter.getGeometryElement(modelAssembly)
 
     # Define an xml-element that is necessary for FEBio.
     rootElement = ET.Element('febio_spec',{'version': '2.5'})  # Create the element that will contain the 'Geometry' xml-element.
-    rootElement.append(geometryXmlElement)
+    rootElement.append(geometryXmlElement) # Add the geometry xml-element to the rootElement
 
+    # Write the .feb file that defines the part's geometry
     FebioFileWriter.xmlElementWriter(rootElement, 'test.xml')
-
     return
 
 
