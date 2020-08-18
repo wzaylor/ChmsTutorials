@@ -9,27 +9,29 @@ import FebioFileWriter
 def example():
     # Manually define the node coordinates
     part0Coordinates = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
-    part1Coordinates = np.array([[1.0, 1.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0], [0.0, 2.0, 0.0], [1.0, 2.0, 0.0], [1.0, 2.0, 1.0], [0.0, 2.0, 1.0]])
+    part1Coordinates = np.array([[0.0, 1.1, 0.0], [1.0, 1.1, 0.0], [1.0, 2.0, 0.0], [0.0, 2.0, 0.0], [0.0, 1.1, 1.0], [1.0, 1.1, 1.0], [1.0, 2.0, 1.0], [0.0, 2.0, 1.0]])
     # Manually define the elements.
     part0Elements = np.array([[0, 1, 2, 3, 4, 5, 6, 7]], dtype=int)
     part1Elements = np.array([[0, 1, 2, 3, 4, 5, 6, 7]], dtype=int)
     # Manually define the nodeSets
-    part0NodeSet = [3,2,7,6]
-    part1NodeSet = [0,1,4,5]
+    part0FixedNodeSet = [0,1,4,5] # The nodes that are fixed
+    part0TiedNodeSet = [3,2,7,6] # The nodes that are nearest part1
+    part1LoadedNodeSet = [2,3,6,7]
 
     # Define part0
     part0 = FebioPart.Part('part0')
     part0.setNodes(part0Coordinates)
     part0.setElements(part0Elements)
     part0.setMaterialId(1)
-    part0.addNodeSet(part0NodeSet, 'part0NodeSet')
+    part0.addNodeSet(part0FixedNodeSet, 'part0FixedNodeSet')
+    part0.addNodeSet(part0TiedNodeSet, 'part0TiedNodeSet')
 
     # Define part1
     part1 = FebioPart.Part('part1')
     part1.setNodes(part1Coordinates)
     part1.setElements(part1Elements)
-    part1.setMaterialId(1)
-    part1.addNodeSet(part1NodeSet, 'part1NodeSet')
+    part1.setMaterialId(2)
+    part1.addNodeSet(part1LoadedNodeSet, 'part1LoadedNodeSet')
 
     # Create an instance of the model assembly object
     modelAssembly = FebioModelAssembly.ModelAssembly()
@@ -44,7 +46,7 @@ def example():
     rootElement.append(geometryXmlElement) # Add the geometry xml-element to the rootElement
 
     # Write the .feb file that defines the part's geometry
-    FebioFileWriter.xmlElementWriter(rootElement, 'test.xml')
+    FebioFileWriter.xmlElementWriter(rootElement, 'BoxGeometry.xml')
     return
 
 

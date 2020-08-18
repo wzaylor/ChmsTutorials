@@ -32,6 +32,13 @@ def getGeometryElement(modelAssembly):
     geometryElement.append(nodesXmlElement) # Add the nodesXmlElement to the geometry xml-element
     for elem in elementsList: geometryElement.append(elem) # Add the elements to the geometry xml-element
 
+    # Check if there are any nodeSets, then add them to the geometry element.
+    for nodeSetName in modelAssembly.nodeSetNames: # Iterate over the nodeSet names
+        for part in modelAssembly.parts: # Iterate over the keys in 'modelAssembly.parts'
+            if nodeSetName in modelAssembly.parts[part].nodeSets.keys(): # Check if the 'part' contains a nodeSet with the key 'nodeSetName'
+                nodeSetElement = getNodeSetElement(modelAssembly.parts[part].nodeSets[nodeSetName], nodeSetName) # Create the nodeSet xml-element
+                geometryElement.append(nodeSetElement) # Append the nodeSet xml-element to the geometry xml-element
+
     return geometryElement
 
 def getNodeXmlElement(nodeId, nodeCoordinates):
@@ -99,3 +106,24 @@ def xmlElementWriter(xmlElement, fileName):
     with open(fileName, mode='wb') as fl:  # Open/create a new file that uses the 'fileName' variable to define the file's name.
         fl.write(xmlString)  # Write 'xmlString' to the file
     return
+
+def getNodeSetElement(nodeSet, name):
+    """
+    Define a nodeSet element.
+    The resulting element will be similar to the following
+        <NodeSet name="nodeset1">
+          <node id="1"/>
+          <node id="2"/>
+          <node id="101"/>
+          <node id="102"/>
+        </NodeSet>
+
+    :param nodeSet: array 1xn, An array of integers, where the integers are the nodeIds for the nodes that compose the set.
+    :param name: string, The name that is assigned to the nodeset
+    :return: xml.etree.cElementTree.Element, The element that can be written to a xml file to define the nodeSet.
+    """
+    element = ET.Element('NodeSet', {'name': name})
+    for nodeId in nodeSet:
+        nodeId = int(nodeId)
+        ET.SubElement(element, 'node', {'id':str(nodeId)})
+    return element

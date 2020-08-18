@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<febio_spec version="2.5">
+    <Module type="solid"/>
+    <Control>
+        <time_steps>10</time_steps>
+        <step_size>0.1</step_size>
+        <max_refs>15</max_refs>
+        <max_ups>10</max_ups>
+        <diverge_reform>1</diverge_reform>
+        <reform_each_time_step>1</reform_each_time_step>
+        <dtol>0.001</dtol>
+        <etol>0.01</etol>
+        <rtol>0</rtol>
+        <lstol>0.9</lstol>
+        <min_residual>1e-20</min_residual>
+        <qnmethod>0</qnmethod>
+        <rhoi>0</rhoi>
+        <time_stepper>
+            <dtmin>0.01</dtmin>
+            <dtmax>0.1</dtmax>
+            <max_retries>5</max_retries>
+            <opt_iter>10</opt_iter>
+        </time_stepper>
+        <analysis type="static"/>
+    </Control>
+    <Material>
+        <material id="1" name="NeoHookean" type="neo-Hookean">
+            <density>1</density>
+            <E>500</E>
+            <v>0.3</v>
+        </material>
+        <material id="2" name="boxRigid" type="rigid body">
+			<density>1</density>
+			<center_of_mass>0.5,1.5,0.5</center_of_mass>
+		</material>
+    </Material>
+    <Include>BoxGeometry.xml</Include>
+    <Boundary>
+        <fix bc="x,y,z" node_set="part0FixedNodeSet"/>
+        <rigid rb="2" node_set="part0TiedNodeSet"/>
+    </Boundary>
+    <Loads>
+        <nodal_load bc="y" node_set="part1LoadedNodeSet">
+            <scale lc="1">1.0</scale>
+        </nodal_load>
+    </Loads>
+    <LoadData>
+        <loadcurve id="1" type="smooth">
+            <point>0.,0.</point>
+            <point>1.,10.</point>
+        </loadcurve>
+    </LoadData>
+</febio_spec>

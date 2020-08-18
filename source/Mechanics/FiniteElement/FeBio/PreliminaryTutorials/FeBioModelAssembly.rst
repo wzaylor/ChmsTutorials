@@ -28,20 +28,67 @@ We will define three primary steps to creating a finite element model with the P
 
 Part Definition
 ---------------
-First, create an empty file named ``FebioPart.py`` in your PyCharm project in the ``src`` directory. For example, if your project is named ``FebioTools``, the file you create should be located in ``C:\Projects\FebioTools\src\FebioPart.py``.
+First, create an empty file named ``FebioPart.py`` in your PyCharm project in the ``src`` directory. For example, if your project is named ``FebioTools``, the file you create should be located in ``C:\Projects\FebioTools\src\FebioPart.py``. Copy and paste the code below into the file (FebioPart.py).
 
 The primary purpose of the *part* in the model definition is to store node and element data. A Python class will be used to define *part* objects in the code (see the :ref:`PythonGeneralPythonClass` tutorial if you are unfamiliar). This tutorial defines a basic *part* class for clarity. Later tutorials will make improvements on that class (it is intended that interested users will modify the existing *part* class instead of creating multiple variations of the same class).
 
-The *part* class will have the following attributes:
+The *part* class has the following attributes:
     * nodes, array nx3: The (x,y,z) coordinates for n nodes. The node numbers (nodeIds) correspond to the row number in the array.
     * elements, array mx8: The element definitions that compose the part's mesh. It is assumed that these are 8 noded hexahedral elements. The element numbers (elementIds) correspond to the row number in the array.
     * materialId, int: The integer that is associated with the part's material properties. It is assumed that all of the part's elements have the same material properties.
     * nodeSets, dictionary: The nodesets for the part. Each key in the dictionary is the name of the nodeset, and the value for each entry is a 1xr array, where the values in the list are the nodeIds that compose the element set.
+    * name, string: A string that is assigned to the part. This is of use during model assembly.
 
 In practice, there are multiple ways to define the attributes for the *part*. Knowing that the *part* class will likely be modified in the future, we will create individual methods to assign values to the part's attributes. The names of these methods will not be creative, they will simply be *setNodes* to define the part's nodes attribute, etc.
 
 .. literalinclude:: /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/Scripts/FebioTools/src/FebioPart.py
    :language: python
-   :emphasize-lines: 1
    :linenos:
 
+Model Assembly
+--------------
+First, create an empty file named ``FebioModelAssembly.py`` in your PyCharm project in the ``src`` directory. For example, if your project is named ``FebioTools``, the file you create should be located in ``C:\Projects\FebioTools\src\FebioModelAssembly.py``. Copy and paste the code below into the file (``FebioModelAssembly.py``).
+
+There are two purposes for the *ModelAssembly* class. (1) Store the part instances. (2) Assign/adjust node and element numbering.
+
+The *ModelAssembly* class has the following attributes:
+    * parts, dictionary: A dictionary that stores the instances of the FebioTools.FebioPart.Part class instance. The keys are the names that are assigned to the parts.
+    * nodeIds, dictionary: A dictionary of lists, where integers compose each list. The keys are the part's name and the list is the nodeIds that correspond to the part's nodes.
+    * elementIds, dictionary: A dictionary of lists, where integers compose each list. The keys are the part's name and the list is the elementIds that correspond to the part's elements.
+    * nodeIdOffset, int: The integer that is used to reassign node numbers.
+    * elementIdOffset, int: The integer that is used to reassign element numbers.
+    * nodeSetNames, list: A list of strings that stores the names of the nodesets that are defined in ``self.parts``. This variable is generally used for convenience, so the names do not need to be references from ``self.parts``.
+
+.. literalinclude:: /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/Scripts/FebioTools/src/FebioModelAssembly.py
+   :language: python
+   :linenos:
+
+Model Writing
+-------------
+First, create an empty file named ``FebioFileWriter.py`` in your PyCharm project in the ``src`` directory. For example, if your project is named ``FebioTools``, the file you create should be located in ``C:\Projects\FebioTools\src\FebioFileWriter.py``. Copy and paste the code below into the file (``FebioFileWriter.py``).
+
+The purpose of this file is to store functions that are used to write components of the FEBio .feb files. This file contains functions that are similar to a previous tutorial (:ref:`FeBioSimpleBarScriptedGeometry`).
+
+.. literalinclude:: /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/Scripts/FebioTools/src/FebioFileWriter.py
+   :language: python
+   :linenos:
+
+Example
+'''''''
+First, an empty file named ``FebioModelAssemblyExample.py`` in your PyCharm project in the ``src`` directory. For example, if your project is named ``FebioTools``, the file you create should be located in ``C:\Projects\FebioTools\src\FebioModelAssemblyExample.py``. Copy and paste the code below into the file (``FebioModelAssemblyExample.py``).
+
+This code creates a specific model. It is generally better to keep the generic tools (such as ``FebioPart.py``, ``FebioModelAssembly.py``, and ``FebioFileWriter.py``) separate from scripts that are used for specific applications (such as ``FebioModelAssemblyExample.py``). This tutorial puts them in the same folder for simplicity, however other tutorials will put the scripts with specific applications into a separate directory.
+
+This example creates a poor representation of a knee model. The model has a deformable "ligament" that is in the shape of a cube. There is a rigid "femur" that also has the shape of a box, and the "tibia" geometry is not present at all. The nodes that are on the tibia side of the "ligament" are fixed, and the nodes that are on the femur side of the "ligament" are rigidly tied to the "femur" geometry. A load of 1 N is applied to four of the femur's nodes (for a total of 4 N).
+
+If you run the code below, it will generate a file named ``BoxGeometry.xml`` located in the same directory that ``FebioModelAssemblyExample.py`` is located in (likely ``C:\Projects\FebioTools\src``). Move this file to a different directory (such as ``C:\Projects\FebioTools\sol\ModelAssemblyExample``). Then copy the last code-block into a file called ``ModelAssemblyExample.feb``, which should be in the same directory as ``BoxGeometry.xml`` (such as ``C:\Projects\FebioTools\sol\ModelAssemblyExample``).
+
+Run the model ``ModelAssemblyExample.feb`` from a command prompt (or terminal). See :ref:`SimpleBarExampleRunningModel` to show how to run a .feb file in *command prompt* or a *terminal*.
+
+.. literalinclude:: /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/Scripts/FebioTools/src/FebioModelAssemblyExample.py
+   :language: python
+   :linenos:
+
+.. literalinclude:: /Mechanics/FiniteElement/FeBio/PreliminaryTutorials/Scripts/FebioTools/src/ModelAssemblyExample.feb
+   :language: xml
+   :linenos:
