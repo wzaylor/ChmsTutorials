@@ -25,4 +25,5 @@ The model creation tutorials demonstrate specific aspects of creating a finite e
     :numbered:
     :caption: Model Creation Tutorials:
 
+    /Mechanics/FiniteElement/FeBio/ModelCreationTutorials/LigamentInsertionDistanceFilter.rst
     /Mechanics/FiniteElement/FeBio/ModelCreationTutorials/GeneratingSolidTetMesh.rst
