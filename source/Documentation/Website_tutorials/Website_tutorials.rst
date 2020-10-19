@@ -11,3 +11,4 @@ This page organizes the different CHMS Website documentation tutorials.
     :caption: Contents:
 
     /Documentation/Website_tutorials/CreateNewTutorial.rst
+    /Documentation/Website_tutorials/WebsiteBibliography.rst
